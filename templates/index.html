@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+   <!-- Головна сторінка -->
+    <h2 style="text-align: center;">Ласкаво просимо до Резюме Билдер!</h2>
+    <p style="text-align: center;">
+        Цей сайт допоможе вам створити професійне резюме за кілька хвилин.
+    </p>
+
+    <!-- Посилання на створення резюме -->
+    <div class="text-center mt-4">
+        <a href="{% url 'create_resume' %}" class="btn btn-primary">Створити резюме</a>
+    </div>
+
+    <!-- Список готових резюме-->
+    <h3>Ваші резюме:</h3>
+    <ul class="list-group">
+        {% for resume in resumes %}
+            <li class="list-group-item">
+                <a href="#">{{ resme.title }}</a>
+                <span class="badge bg-secondary">
+                    {{ resume.created_at }}
+                </span>
+            </li>
+        {% empty %}
+            <li class="list-group-item">У вас немає жодного резюме.</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Резюме сторінка -->
+<h2>Редактор резюме</h2>
+<form method="post">
+    <!-- Форма для резюме -->
+    <div class="mb-3">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" class="form-control" required>
+
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" class="form-control">
+            {% if resume %}
+                {{ resume.content }}
+            {% endif %}
+        </textarea>
+
+    </div>
+    
+    <button type="submit">Зберегти резюме</button>
+</form>
+{% endblock %}
