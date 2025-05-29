@@ -17,7 +17,7 @@
     <ul class="list-group">
         {% for resume in resumes %}
             <li class="list-group-item">
-                <a href="#">{{ resme.title }}</a>
+                <a href="{% url 'resume' resume.id %}">{{ resume.title }}</a>
                 <span class="badge bg-secondary">
                     {{ resume.created_at }}
                 </span>

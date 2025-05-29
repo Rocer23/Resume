@@ -1,8 +1,9 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-
-from core.models import Resume
+from .forms import ResumeForm
+from django.contrib.auth.decorators import login_required
+from core.models import Resume, CustomUser
 
 
 # Create your views here.
@@ -17,8 +18,8 @@ def index(request):
     resumes = Resume.objects.all()
     return render(request, 'index.html', {
         'context': context,
-        'resumes' : resumes
-     })
+        'resumes': resumes
+    })
 
 
 # реєстрація користувача
@@ -36,13 +37,39 @@ def register(request):
 
 
 # створення резюме
+@login_required
 def create_resume(request):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        # Тут можна зберегти резюме у базу даних
-        resume = Resume(title=title, content=content)
-        resume.save()
-        return redirect('index')
+        form = ResumeForm(request.POST)
+        if form.is_valid():
+            resume = form.save(commit=False)
+            resume.user = request.user
+            resume.save()
+            return redirect('index')
+    else:
+        form = ResumeForm()
 
-    return render(request, 'create_resume.html')
+    return render(request, 'create_resume.html', {'form': form})
+
+
+# Сторінка резюме
+def resume(request, resume_id):
+    try:
+        resumes = Resume.objects.get(id=resume_id, user=request.user)
+    except Resume.DoesNotExist:
+        return redirect('resume.html')
+    return render(request, 'resume.html', {'resume': resumes, 'title': resumes.title, 'description': resumes.content})
+
+
+def user_profile(request, user_id):
+    try:
+        user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return redirect('index')
+    resumes = Resume.objects.filter(user=user)
+    return render(request, 'user_profile.html', {
+        'user': user,
+        'resumes': resumes,
+        'title': f"{user.username}'s Profile",
+        'description': f"Profile page of {user.username}"
+    })

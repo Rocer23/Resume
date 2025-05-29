@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for resume in resumes %}
+        <div class="resume">
+            <h2>{{ resume.title }}</h2>
+            <h3>Content</h3>
+            <ul>
+                {% for item in resume.content %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+
+{% endblock %}

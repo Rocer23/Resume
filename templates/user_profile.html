@@ -1,0 +1,19 @@
+<!-- User profile template -->
+{% extends "base.html" %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<h2>User Profile</h2>
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+
+{% if resume %}
+    <h3>Your Resume</h3>
+    <p>Title: {{ resume.title }}</p>
+    <p>Content: {{ resume.content }}</p>
+{% else %}
+    <p>You have not created a resume yet.</p>
+{% endif %}
+
+{% endblock %}

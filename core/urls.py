@@ -15,4 +15,6 @@ urlpatterns = [
     path('logout/', CustomLogoutView.as_view(next_page='login'), name='logout'),
     path('register/', views.register, name='register'),
     path('create-resume/', views.create_resume, name='create_resume'),
+    path('resume/<int:resume_id>/', views.resume, name='resume'),
+    path('user-profile/<int:user_id>/', views.user_profile, name='user-profile'),
 ]
