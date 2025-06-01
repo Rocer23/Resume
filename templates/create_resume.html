@@ -11,6 +11,17 @@
         <input type="text" id="title" name="title" class="form-control" required>
 
         <hr>
+        <!-- Поля для введення адреси та номера телефону в один рядок -->
+        <div class="row">
+            <div class="col">
+                <label for="address" class="label-control">Address:</label>
+                <input type="text" id="address" name="address" class="form-control" required>
+            </div>
+            <div class="col">
+                <label for="phone" class="label-control">Phone:</label>
+                <input type="phone" id="phone" name="phone" class="form-control" required>
+            </div>
+        </div>
 
         <label for="content">Content:</label>
         <textarea id="content" name="content" class="form-control">

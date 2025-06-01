@@ -19,6 +19,8 @@ class Resume(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
+    phone = models.CharField(max_length=50, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
