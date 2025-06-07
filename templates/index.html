@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
    <!-- Головна сторінка -->
     <h2 style="text-align: center;">Ласкаво просимо до Резюме Билдер!</h2>
@@ -9,7 +10,7 @@
 
     <!-- Посилання на створення резюме -->
     <div class="text-center mt-4">
-        <a href="{% url 'create_resume' %}" class="btn btn-primary">Створити резюме</a>
+        <a href="{% url 'create_resume' %}" class="btn btn-primary" id="create-resume-btn">Створити резюме</a>
     </div>
 
     <!-- Список готових резюме-->
@@ -27,4 +28,23 @@
         {% endfor %}
     </ul>
 
+    <hr>
+
+    <!-- News on the one line -->
+    <h3>Новини</h3>
+    <ul class="list-group">
+        {% for news in news_list %}
+            <li class="list-group-item">
+                <a href="{% url 'news' news.id %}">{{ news.title }}</a>
+                <span class="badge bg-secondary">
+                    {{ news.created_at }}
+                </span>
+            </li>
+        {% empty %}
+            <li class="list-group-item">
+                Нема новин
+            </li>
+        {% endfor %}
+    </ul>
+<script src="{% static 'js/redirect.js' %}"></script>
 {% endblock %}

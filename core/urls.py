@@ -17,4 +17,6 @@ urlpatterns = [
     path('create-resume/', views.create_resume, name='create_resume'),
     path('resume/<int:resume_id>/', views.resume, name='resume'),
     path('user-profile/<int:user_id>/', views.user_profile, name='user-profile'),
+    path('news/', views.create_news, name="create-news"),
+    path('news/<int:new_id>/', views.news, name='news')
 ]

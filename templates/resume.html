@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for resume in resumes %}
-        <div class="resume">
-            <h2>{{ resume.title }}</h2>
-            <h3>Content</h3>
-            <ul>
-                {% for item in resume.content %}
-                    <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endfor %}
+<div class="container label-control">
+    <h2>{{ resume.title }}</h2>
 
+    <p>
+        <span>
+            {{ resume.phone }}
+        </span>
+        <span>
+            {{ resume.address }}
+        </span>
+    </p>
+    <h3>Content</h3>
+    <ul>
+        <li>{{ resume.content }}</li>
+    </ul>
+</div>
 {% endblock %}
