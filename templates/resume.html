@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container label-control">
+<div class="container">
     <h2>{{ resume.title }}</h2>
 
     <p>
@@ -15,6 +15,9 @@
     <h3>Content</h3>
     <ul>
         <li>{{ resume.content }}</li>
+        <ul>languages:
+            <li>{{ resume.language }}</li>
+        </ul>
     </ul>
 </div>
 {% endblock %}

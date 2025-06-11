@@ -1,9 +1,11 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ResumeForm, NewsForm
 from django.contrib.auth.decorators import login_required
-from core.models import Resume, CustomUser, News
+from core.models import Resume, CustomUser, News, Comment
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -99,10 +101,41 @@ def create_news(request):
 
 def news(request, new_id):
     try:
-        news = News.objects.get(id=new_id)
+        news = get_object_or_404(News, id=new_id)
+        comments = Comment.objects.filter(news=news).order_by('-created_at')
     except News.DoesNotExist:
         return redirect('index')
     return render(request, 'news.html', {
-        'title': news.title,
-        'content': news.content
+        'news': news,
+        'comments': comments
+    })
+
+
+@csrf_exempt
+def add_comment(request):
+    if request.method == "POST":
+        news_id = request.POST.get('news_id')
+        text = request.POST.get('text')
+
+        if request.user.is_authenticated and news_id and text:
+            news = News.objects.get(id=news_id)
+            comment = Comment.objects.create(
+                username=request.user,
+                news=news,
+                text=text
+            )
+            return JsonResponse({
+                'status': 'ok',
+                'username': request.user.username,
+                'text': comment.text,
+                'create_at': comment.created_at.strftime("%d.%m.%Y %H:%M")
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Недійсні дані або неавторизований користувач'
+            })
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Невірний метод'
     })

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import CustomUser, Resume, ResumeSection, TemplateResume, News
+from core.models import CustomUser, Resume, ResumeSection, TemplateResume, News, Comment
 
 # Register your models here.
 
@@ -41,4 +41,12 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'created_at', 'updated_at')
     search_fields = ('title',)
     list_filter = ('created_at', 'updated_at')
+    ordering = ('-created_at',)
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('news', 'text', 'created_at')
+    search_fields = ('news', 'created_at')
+    list_filter = ('created_at',)
     ordering = ('-created_at',)

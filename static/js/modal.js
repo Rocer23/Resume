@@ -7,6 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
         commentModal.show();
     })
     closeBtn.addEventListener('click', function() {
-        commentModal.close();
+        commentModal.hide();
     })
 })

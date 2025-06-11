@@ -18,5 +18,6 @@ urlpatterns = [
     path('resume/<int:resume_id>/', views.resume, name='resume'),
     path('user-profile/<int:user_id>/', views.user_profile, name='user-profile'),
     path('news/', views.create_news, name="create-news"),
-    path('news/<int:new_id>/', views.news, name='news')
+    path('news/<int:new_id>/', views.news, name='news'),
+    path('add_comment/', views.add_comment, name='add-comment')
 ]
