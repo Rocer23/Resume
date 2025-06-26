@@ -1,15 +1,23 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from core.models import CustomUser, Resume, ResumeSection, TemplateResume, News, Comment
+from core.forms import CustomUserCreationForm, CustomUserChangeForm
+
 
 # Register your models here.
 
 
-@admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = CustomUser
     list_display = ('username', 'first_name', 'last_name', 'email')
     search_fields = ('username', 'email')
     list_filter = ('is_staff', 'is_active')
     ordering = ('username',)
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
 
 
 @admin.register(Resume)

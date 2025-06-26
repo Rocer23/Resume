@@ -1,8 +1,7 @@
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ResumeForm, NewsForm
+from .forms import ResumeForm, NewsForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from core.models import Resume, CustomUser, News, Comment
 from django.views.decorators.csrf import csrf_exempt
@@ -31,14 +30,15 @@ def index(request):
 # реєстрація користувача
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('index')
-        return render(request, 'register.html', {'form': form})
+        else:
+            print(form.errors)
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
 
@@ -62,9 +62,11 @@ def create_resume(request):
 def resume(request, resume_id):
     try:
         resumes = Resume.objects.get(id=resume_id, user=request.user)
+        user = resumes.user
     except Resume.DoesNotExist:
         return redirect('index')
     return render(request, 'resume.html', {
+        'user': user,
         'resume': resumes,
         'title': resumes.title,
         'description': resumes.content,

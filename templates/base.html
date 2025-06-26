@@ -34,9 +34,16 @@
                             <a class="nav-link" href="{% url 'register' %}">Register</a>
                         </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create-news' %}">Створити новину</a>
-                    </li>
+                    
+                    {% if user.is_staff or user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'create-news' %}">Створити новину</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-link">
+                            <a class="nav-link" href="#news">Новини</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         {% if user and user.id %}
                             <a class="nav-link" href="{% url 'user-profile' user.id %}">User profile</a>
@@ -47,11 +54,26 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container mt-4" style="padding-bottom: 40px;">
         {% block content %}
         <!-- Content will be injected here -->
         {% endblock %}
 
+    </div>
+
+    <br>
+
+    <div class="footer mt-5" style="position: fixed; left: 0; bottom: 0; width: 100%; background-color: #f8f9fa; color: #fff; text-align: center;">
+        <div class="text-container">
+            <p class="text-muted mb-0">
+                &copy; 2025 Resume Builder. All rights reserved.
+            </p>
+            <p class="text-muted mb-0">
+                Made with <span class="text-primary">
+                    <a href="https://www.djangoproject.com/" style="text-decoration: none; color: black;">Django</a>
+                </span>
+            </p>
+        </div>
     </div>
 
     <script src="{% static 'js/modal.js' %}"></script>

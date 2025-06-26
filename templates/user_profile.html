@@ -4,16 +4,44 @@
 {% block title %}User Profile{% endblock %}
 
 {% block content %}
-<h2>User Profile</h2>
-<p>Username: {{ user.username }}</p>
-<p>Email: {{ user.email }}</p>
+<style>
+    .container {
+        border: 1px dashed lightgray;
+        padding: 20px;
+        border-radius: 10px;
+    }
+</style>
 
-{% if resume %}
-    <h3>Your Resume</h3>
-    <p>Title: {{ resume.title }}</p>
-    <p>Content: {{ resume.content }}</p>
-{% else %}
-    <p>You have not created a resume yet.</p>
-{% endif %}
+<div class="mb-3 container">
+    <h2>User Profile</h2>
+    <div class="row g-auto align-items-center">
+        <label class="form-label">UserName: {{ user.username }}</label>
+        <label for="email" class="form-label">Email: {{ user.email }}</label>
+    </div>
+    
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="name" class="form-label">Name: {{ user.first_name }}</label>
+        </div>
+        <div class="col-md-4">
+            <label for="surname" class="form-label">Surname: {{ user.last_name }}</label>
+        </div>
+    </div>
+
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="password" class="col-form-label">Password:</label>
+        </div>
+        <div class="col-auto">
+            <input type="password" name="password" id="password" class="form-control" aria-describedby="passwordHelpInline" value="{{ user.password }}" readonly>
+        </div>
+        <div class="col-auto">
+            <span id="passwordHelpInline" class="form-text">
+                <a href="#EditPassword">Edit</a>
+            </span>
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}

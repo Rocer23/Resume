@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(responce => responce.json())
         .then(data => {
-            if (status === 'ok') {
+            if (data.status === 'ok') {
                 const commentsBlock = document.getElementById('comments');
                 const newComment = `
                     <p><strong>${data.username}</strong> (${data.create_at}):</p>
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const modal = boostrap.Modal.getInstance(document.getElementById('Modal'));
                 modal.hide();
             } else {
-                alert(message);
+                alert(data.massage);
             }
         })
     })

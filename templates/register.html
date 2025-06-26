@@ -7,38 +7,55 @@
     <h2>Реєстрація</h2>
     <!-- Container in square style -->
     <div class="container border p-4 rounded" style="border-radius: 15px;">
-        <form method="post" id="register-form">
+        <form method="post" id="register-form" novalidate>
             {% csrf_token %}
+
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" name="username" class="form-control" required>
+                <label for="id_username" class="form-label">Username</label>
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
             </div>
             <!-- Ім'я та Прізвище в один ряд -->
             <div class="mb-3 row">
                 <div class="col">
-                    <label for="first_name" class="form-label">Name</label>
-                    <input type="text" id="first_name" name="first_name" class="form-control" required>
+                    <label for="id_first_name" class="form-label">Name</label>
+                    {{ form.first_name }}
+                    {% for error in form.first_name.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
                 </div>
                 <div class="col">
-                    <label for="last_name" class="form-label">Surname</label>
-                    <input type="text" id="last_name" name="last_name" class="form-control" required>
+                    <label for="id_last_name" class="form-label">Surname</label>
+                    {{ form.last_name }}
+                    {% for error in form.last_name.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
                 </div>
             </div>
-
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+                <label for="id_email" class="form-label">Email</label>
+                {{ form.email }}
+                {% for error in form.email.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
             </div>
-
             <!-- Пароль та підтвердження пароля в один ряд -->
             <div class="bm-3 row">
                 <div class="col">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" required>
+                    <label for="id_password1" class="form-label">Password</label>
+                    {{ form.password1 }}
+                    {% for error in form.password1.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
                 </div>
                 <div class="col">
-                    <label for="confirm_password" class="form-label">Confirm password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                    <label for="id_password2" class="form-label">Confirm password</label>
+                    {{ form.password2 }}
+                    {% for error in form.password2.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="d-grd gap-2">
