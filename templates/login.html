@@ -2,23 +2,29 @@
 {% block content %}
 <!-- Style on bootstrap -->
 <div class="container mt-4">
-    <h2>Вхід до системи</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="username" class="form-label">Ім'я користувача</label>
-            <input type="text" id="username" name="username" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Пароль</label>
-            <input type="password" id="password" name="password" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Увійти</button>
-    </form>
+    <div class="container border p-4 rounded" style="border-radius: 15px;">
+        <h2>Вхід до системи</h2>
+        <form method="post" id="login-form">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Ім'я користувача</label>
+                <input type="text" id="username" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
 
-    <div class="mt-3">
-        <p>Не маєте облікового запису? <a href="{% url 'register' %}">Зареєструватися</a></p>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Увійти</button>
+            </div>
+        </form>
+
+        <div class="mt-3">
+            <p>Не маєте облікового запису? <a href="{% url 'register' %}">Зареєструватися</a></p>
+        </div>
     </div>
 </div>
+
 
 {% endblock %}

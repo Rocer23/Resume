@@ -1,30 +1,118 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
-   <!-- Головна сторінка -->
-    <h2 style="text-align: center;">Ласкаво просимо до Резюме Билдер!</h2>
-    <p style="text-align: center;">
-        Цей сайт допоможе вам створити професійне резюме за кілька хвилин.
-    </p>
+<style>
+    li {
+        list-style-type: none;
+    }
 
-    <!-- Посилання на створення резюме -->
-    <div class="text-center mt-4">
-        <a href="{% url 'create_resume' %}" class="btn btn-primary">Створити резюме</a>
-    </div>
+    .slide-line {
+        display: flex;
+        overflow-x: scroll;
+        word-break: keep-all;
+        overflow-y: hidden;
+        white-space: auto;
+        scroll-padding: 20px;
 
-    <!-- Список готових резюме-->
-    <h3>Ваші резюме:</h3>
-    <ul class="list-group">
-        {% for resume in resumes %}
-            <li class="list-group-item">
-                <a href="{% url 'resume' resume.id %}">{{ resume.title }}</a>
-                <span class="badge bg-secondary">
-                    {{ resume.created_at }}
-                </span>
-            </li>
-        {% empty %}
-            <li class="list-group-item">У вас немає жодного резюме.</li>
-        {% endfor %}
-    </ul>
+    }
+
+    .slide-card {
+        padding: 10px;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .box {
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+    }
+    .resumes, .news{
+        padding: 20px;
+        border: 1px dashed lightgray;
+        border-radius: 10px;
+        box-shadow: 0.30rem 0.6rem 0.3rem rgba(0, 0, 0, 0.3);
+    }
+
+    h3 {
+        padding-top: 25px;
+    }
+</style>
+
+
+<!-- Головна сторінка -->
+ <h2 style="text-align: center;">Ласкаво просимо до Резюме Билдер!</h2>
+ <p style="text-align: center;">
+     Цей сайт допоможе вам створити професійне резюме за кілька хвилин.
+ </p>
+ <!-- Посилання на створення резюме -->
+ <div class="text-center mt-4">
+     <a href="{% url 'create_resume' %}" class="btn btn-primary" id="create-resume-btn">Створити резюме</a>
+ </div>
+
+
+<div class="box">
+    <!-- Резюме -->
+    <h3>Ваші резюме</h3>
+    <section class="resumes">
+        <div class="container">
+            <div class="vertical-scrolling" style="overflow-y: scroll; overflow-x: hidden; height: 400px;">
+                {% for resume in resumes %}
+                <div class="card">
+                    <div class="card-header">
+                        Featured
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ resume.title }}</h5>
+                        <p class="card-text">{{ resume.content }}</p>
+                        <a href="{% url 'resume' resume.id %}" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+ </div>
+
+ <!--<ul class="list-group">
+     {% for resume in resumes %}
+         <li class="list-group-item">
+             <a href="{% url 'resume' resume.id %}">{{ resume.title }}</a>
+             <span class="badge bg-secondary">
+                 {{ resume.created_at }}
+             </span>
+         </li>
+     {% empty %}
+         <li class="list-group-item">У вас немає жодного резюме.</li>
+     {% endfor %}
+ </ul>-->
+
+<div class="box">
+    <!-- News on the one line -->
+    <h3>Новини</h3>
+    <section class="news">
+        <div class="slide-line">
+            {% for news in news_list %}
+            <div class="slide-card">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <p class="card-text">{{  news.content }}</p>
+                        <a href="{% url 'news' news.id %}" class="card-link">Читати далі</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+
 
 {% endblock %}

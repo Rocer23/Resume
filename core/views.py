@@ -1,9 +1,10 @@
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
-from .forms import ResumeForm
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import ResumeForm, NewsForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
-from core.models import Resume, CustomUser
+from core.models import Resume, CustomUser, News, Comment
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -16,23 +17,28 @@ def index(request):
     }
     # show all resumes on index
     resumes = Resume.objects.all()
+
+    # show all news on index
+    news_list = News.objects.all()
     return render(request, 'index.html', {
         'context': context,
-        'resumes': resumes
+        'resumes': resumes,
+        'news_list': news_list,
     })
 
 
 # реєстрація користувача
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('index')
-        return render(request, 'register.html', {'form': form})
+        else:
+            print(form.errors)
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
 
@@ -56,9 +62,18 @@ def create_resume(request):
 def resume(request, resume_id):
     try:
         resumes = Resume.objects.get(id=resume_id, user=request.user)
+        user = resumes.user
     except Resume.DoesNotExist:
-        return redirect('resume.html')
-    return render(request, 'resume.html', {'resume': resumes, 'title': resumes.title, 'description': resumes.content})
+        return redirect('index')
+    return render(request, 'resume.html', {
+        'user': user,
+        'resume': resumes,
+        'title': resumes.title,
+        'description': resumes.content,
+        'phone': resumes.phone,
+        "address": resumes.address,
+        "languages": resumes.language
+    })
 
 
 def user_profile(request, user_id):
@@ -72,4 +87,57 @@ def user_profile(request, user_id):
         'resumes': resumes,
         'title': f"{user.username}'s Profile",
         'description': f"Profile page of {user.username}"
+    })
+
+
+def create_news(request):
+    if request.method == "POST":
+        form = NewsForm(request.POST)
+        if form.is_valid():
+            news = form.save()
+            return redirect('news', {'news': news})
+    else:
+        form = NewsForm()
+    return render(request, "create_new.html", {"form": form})
+
+
+def news(request, new_id):
+    try:
+        news = get_object_or_404(News, id=new_id)
+        comments = Comment.objects.filter(news=news).order_by('-created_at')
+    except News.DoesNotExist:
+        return redirect('index')
+    return render(request, 'news.html', {
+        'news': news,
+        'comments': comments
+    })
+
+
+@csrf_exempt
+def add_comment(request):
+    if request.method == "POST":
+        news_id = request.POST.get('news_id')
+        text = request.POST.get('text')
+
+        if request.user.is_authenticated and news_id and text:
+            news = News.objects.get(id=news_id)
+            comment = Comment.objects.create(
+                username=request.user,
+                news=news,
+                text=text
+            )
+            return JsonResponse({
+                'status': 'ok',
+                'username': request.user.username,
+                'text': comment.text,
+                'create_at': comment.created_at.strftime("%d.%m.%Y %H:%M")
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Недійсні дані або неавторизований користувач'
+            })
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Невірний метод'
     })

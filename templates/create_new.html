@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Створення Новин</h2>
+<form method="post">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="title" class="form-label">Title:</label>
+    <input type="text" id="title" name="title" class="form-control" required>
+
+    <label for="content" class="form-label">Content:</label>
+    <textarea name="content" id="content" cols="30" rows="10" class="form-control">
+      {% if news %}
+        {{ news.content }}
+      {% endif %}
+    </textarea>
+
+    <label for="picture" class="form-label gap-2">Picture:</label>
+    <input type="file" name="picture" id="picture"  class="form-control photo-upload" accept="picture/*">
+    <img id="the-picture" class="rounded mx-auto d-block" width="500px">
+
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <button type="submit" class="btn btn-primary">Зберегти новину</button>
+    </div>
+  </div>
+</form>
+
+
+<script>
+const uploadPictureBtn = document.querySelector('.photo-upload');
+
+uploadPictureBtn.addEventListener('change', function() {
+  displayPicture(this);
+});
+
+function displayPicture(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      document.getElementById('the-picture').setAttribute('src', e.target.result);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+    uploadPictureBtn.hide();
+  }
+}
+</script>
+{% endblock %}
