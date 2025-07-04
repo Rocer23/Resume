@@ -9,11 +9,11 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf/var/lib/apt/list/*
 
-COPY requirements.txt/app/
+COPY requirements.txt ./
 
 RUN pip install -no-cache-dir -r requirements.txt
 
-COPY ./app/
+COPY . ./
 
 RUN python manage.py collectstatic -noinput
 
