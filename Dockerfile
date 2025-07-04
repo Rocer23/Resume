@@ -7,7 +7,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     gcc \
-    && rm -rf/var/lib/apt/list/*
+    && rm -rf /var/lib/apt/list/*
 
 COPY requirements.txt ./
 
