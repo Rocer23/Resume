@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-aqm%3w*%cmmdf&$t_ym1062pjl$w$enypvx!dm0&@@bd)s2gu9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.onResume.com']
+ALLOWED_HOSTS = ['.onresume.com']
 
 
 # Application definition
