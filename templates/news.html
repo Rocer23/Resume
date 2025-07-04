@@ -11,11 +11,11 @@
     }
     .under-line {
         position: relative;
-        top: 412px;
+        top: 312px;
     }
     .comment {
         position: relative;
-        top: 412px;
+        top: 312px;
     }
 </style>
 
@@ -28,6 +28,13 @@
 <p class="content">
     <span>
         {{ news.content }}
+    </span>
+    <span id="show-picture">
+        <div class="text-center">
+            {% if news.picture %}
+                <img src="{{ news.picture.url }}" class="rounded" alt="">
+            {% endif %}
+        </div>
     </span>
 </p>
 
@@ -46,7 +53,7 @@
                 </div>
             
                 <div class="modal-body">
-                    <form>
+                    <form id="form">
                         {% csrf_token %}
                         <input type="hidden" id="new-id" value="{{ news.id }}"/>
                         <div class="mb-3">
@@ -68,11 +75,10 @@
     <div class="show-comments mt-4" id="comments">
         {% for comment in comments %}
             <p>
-                <strong>{{ comment.username }}</strong>: {{ comment.text }} 
+                <strong>{{ comment.username.username }}</strong> ({{ comment.created_at }}): {{ comment.text }} 
             </p>
         {% endfor %}
         <hr>
     </div>
-
 </div>
 {% endblock %}

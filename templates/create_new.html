@@ -2,8 +2,9 @@
 
 {% block content %}
 <h2>Створення Новин</h2>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   {% csrf_token %}
+  <!--{{ form }}-->
   <div class="mb-3">
     <label for="title" class="form-label">Title:</label>
     <input type="text" id="title" name="title" class="form-control" required>
@@ -18,7 +19,6 @@
     <label for="picture" class="form-label gap-2">Picture:</label>
     <input type="file" name="picture" id="picture"  class="form-control photo-upload" accept="picture/*">
     <img id="the-picture" class="rounded mx-auto d-block" width="500px">
-
     <div class="d-grid gap-2 col-6 mx-auto">
       <button type="submit" class="btn btn-primary">Зберегти новину</button>
     </div>

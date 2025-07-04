@@ -18,9 +18,11 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('create-resume/', views.create_resume, name='create_resume'),
     path('resume/<uuid:resume_id>/', views.resume, name='resume'),
+    path('resume/<uuid:resume_id>/copy/', views.make_copy, name="copy-resume"),
+    path('resume/<uuid:resume_id>/download/', views.download_resume, name='download_resume'),
     path('user-profile/<uuid:user_id>/', views.user_profile, name='user-profile'),
     path('news/', views.create_news, name="create-news"),
     path('news/<uuid:new_id>/', views.news, name='news'),
-    path('news/<uuid:new_id>/add_comment/', views.add_comment, name='add-comment')
+    path('news/<uuid:new_id>/add_comment/', views.add_comment, name='add_comment'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

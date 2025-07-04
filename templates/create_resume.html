@@ -4,10 +4,9 @@
 <!-- Резюме сторінка -->
 <h2>Редактор резюме</h2>
 <div class="container mt-5">
-    <form method="post" novalidate>
+    <form method="post" novalidate enctype="multipart/form-data">
         <!-- Форма для резюме -->
         {% csrf_token %}
-    
         
         <div class="row mb-3">
             <!-- Заголовок, ім'я та прізвище -->
@@ -18,12 +17,12 @@
 
             <div class="col-md-4">
                 <label for="first-name" class="form-label">First Name</label>
-                <input type="text" id="first-name" name="first-name" class="form-control" value="{{ request.user.first_name }}" required>
+                <input type="text" id="first_name" name="first_name" class="form-control" value="{{ request.user.first_name }}" required>
             </div>
         
             <div class="col-md-4">
                 <label for="last-name" class="form-label">Surname</label>
-                <input type="text" id="last-name" name="last-name" class="form-control" value="{{ request.user.last_name }}" required>
+                <input type="text" id="last_name" name="last_name" class="form-control" value="{{ request.user.last_name }}" required>
             </div>
         </div>
 
@@ -51,18 +50,42 @@
             <!-- Права колонка -->
             <div class="col-md-8">
                 <div class="mb-3">
-                    <label for="content" class="form-label">Content/Informations</label>
-                    <textarea class="form-control" name="content" id="content" rows="6">
+                    <label for="content" class="form-label">Meta</label>
+                    <textarea class="form-control" name="content" id="content" rows="4">
                         {% if resume %}
-                            {{ resume.content }}
+                            {{ resume.meta }}
+                        {% endif %}
+                    </textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="education" class="form-label">Education</label>
+                    <textarea class="form-control" name="education" id="education" rows="4">
+                        {% if resume %}
+                            {{ resume.education }}
+                        {% endif %}
+                    </textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="job-experience" class="form-label">Job Experience</label>
+                    <textarea class="form-control" name="job-experience" id="job-experience" rows="4">
+                        {% if resume %}
+                            {{ resume.job_exp }}
                         {% endif %}
                     </textarea>
                 </div>
                 <div class="mb-3">
                     <label for="skills" class="form-label">Skills</label>
-                    <textarea class="form-control" name="skills" id="skills" rows="6">
+                    <textarea class="form-control" name="skills" id="skills" rows="4">
                         {% if resume %}
                             {{ resume.skills }}
+                        {% endif %}
+                    </textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="addition-information" class="form-label">Addition information</label>
+                    <textarea class="form-control" name="add-information" id="add-information" rows="4">
+                        {% if resume %}
+                            {{ resume.add_information }}
                         {% endif %}
                     </textarea>
                 </div>

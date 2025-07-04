@@ -1,15 +1,21 @@
 from django.contrib.auth import login
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+from reportlab.lib.utils import simpleSplit
+from Resume.settings import FONT_PATH
 from .forms import ResumeForm, NewsForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from core.models import Resume, CustomUser, News, Comment
 from django.views.decorators.csrf import csrf_exempt
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 
 # Create your views here.
-
-
 def index(request):
     context = {
         'title': 'My Resume',
@@ -46,6 +52,17 @@ def register(request):
 @login_required
 def create_resume(request):
     if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+
+        user = request.user
+        user.first_name = first_name
+        user.last_name = last_name
+        try:
+            user.save()
+        except Exception as e:
+            print(f"Помилка при збереженні користувача: {e}")
+
         form = ResumeForm(request.POST)
         if form.is_valid():
             resume = form.save(commit=False)
@@ -69,13 +86,84 @@ def resume(request, resume_id):
         'user': user,
         'resume': resumes,
         'title': resumes.title,
-        'description': resumes.content,
-        'phone': resumes.phone,
         "address": resumes.address,
-        "languages": resumes.language
+        'phone': resumes.phone,
+        'description': resumes.meta,
+        'education': resumes.education,
+        'job_exp': resumes.job_exp,
+        "languages": resumes.language,
+        "skills": resumes.skills,
+        'add_information': resumes.add_information
     })
 
 
+def download_resume(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id, user=request.user)
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    FONT_NAME = 'DejaVuSans'
+    pdfmetrics.registerFont(TTFont(FONT_NAME, FONT_PATH))
+    width, height = A4
+
+    x, y = 50, height - 50
+    max_width = 480
+    line_height = 16
+
+    def write(text, size=12, bold=False, indent=0, space_before=10):
+        nonlocal y
+        if not text:
+            return
+        y -= space_before
+        font = FONT_NAME + ('-Bold' if bold else "")
+        p.setFont(FONT_NAME, size)
+        lines = simpleSplit(str(text), FONT_NAME, size, max_width)
+        for line in lines:
+            if y < 50:
+                p.showPage()
+                y = height - 50
+                p.setFont(FONT_NAME, size)
+            p.drawString(x + indent, y, line)
+            y -= line_height
+
+    p.setFont(FONT_NAME, 16)
+    p.drawString(x, y, f"Resume: {resume.title}")
+    y -= 30
+
+    write(f"Name: {resume.user.first_name} {resume.user.last_name}", bold=True)
+    write(f"Phone: {resume.phone}")
+    write(f"Address: {resume.address}")
+    write(f"Languages: {resume.language}")
+    write(f"Skills: {resume.skills}")
+
+    write("About Me: ", bold=True, space_before=20)
+    write(resume.meta)
+
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+
+    return FileResponse(buffer, as_attachment=True, filename=f"{resume.title}.pdf")
+
+
+def make_copy(request, resume_id):
+    original = get_object_or_404(Resume, id=resume_id)
+    copy_resume = Resume.objects.create(
+        user=request.user,
+        title=original.title,
+        address=original.address,
+        phone=original.phone,
+        meta=original.meta,
+        education=original.education,
+        job_exp=original.job_exp,
+        language=original.language,
+        skills=original.skills,
+        add_information=original.add_information
+    )
+    return redirect("resume", resume_id=copy_resume.id)
+
+
+@login_required(redirect_field_name='next', login_url='login')
 def user_profile(request, user_id):
     try:
         user = CustomUser.objects.get(id=user_id)
@@ -92,35 +180,41 @@ def user_profile(request, user_id):
 
 def create_news(request):
     if request.method == "POST":
-        form = NewsForm(request.POST)
+        form = NewsForm(request.POST, request.FILES)
         if form.is_valid():
             news = form.save()
-            return redirect('news', {'news': news})
+            return redirect('news', new_id=news.id)
     else:
         form = NewsForm()
     return render(request, "create_new.html", {"form": form})
 
 
 def news(request, new_id):
-    try:
-        news = get_object_or_404(News, id=new_id)
-        comments = Comment.objects.filter(news=news).order_by('-created_at')
-    except News.DoesNotExist:
-        return redirect('index')
+    news = get_object_or_404(News, id=new_id)
+    comments = Comment.objects.filter(news=news).order_by('-created_at')
+
     return render(request, 'news.html', {
         'news': news,
         'comments': comments
     })
 
 
+@login_required(redirect_field_name='next', login_url='login')
 @csrf_exempt
-def add_comment(request):
+def add_comment(request, new_id):
     if request.method == "POST":
-        news_id = request.POST.get('news_id')
         text = request.POST.get('text')
 
-        if request.user.is_authenticated and news_id and text:
-            news = News.objects.get(id=news_id)
+        if request.user.is_authenticated and text:
+
+            try:
+                news = News.objects.get(id=new_id)
+            except News.DoesNotExist:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': "Новину не знайдено"
+                })
+
             comment = Comment.objects.create(
                 username=request.user,
                 news=news,

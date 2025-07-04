@@ -21,26 +21,16 @@ class Resume(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    content = models.TextField()
-    phone = models.CharField(max_length=50, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=50, blank=True, null=True)
+    meta = models.TextField()
+    education = models.TextField(blank=True)
+    job_exp = models.TextField(blank=True)
     language = models.TextField()
     skills = models.TextField()
+    add_information = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.title
-
-
-class ResumeSection(models.Model):
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='sections')
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    order = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        ordering = ['order']
 
     def __str__(self):
         return self.title
@@ -61,7 +51,8 @@ class News(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     content = models.TextField()
-    picture = models.ImageField(upload_to='pictures/', blank=True, null=True, help_text='Upload a picture for the news article.')
+    picture = models.ImageField(upload_to='pictures/', blank=True, null=True,
+                                help_text='Upload a picture for the news article.')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

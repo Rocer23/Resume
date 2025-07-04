@@ -27,7 +27,7 @@
         padding: 20px;
     }
     
-    .box {
+    .box-resume, .box-news {
         margin: 50px auto;
         padding: 20px;
         background-color: #f8f9fa;
@@ -43,6 +43,15 @@
     h3 {
         padding-top: 25px;
     }
+
+    #btn-text {
+        text-decoration: none;
+        color: gray;
+    }
+
+    #btn-text:hover {
+        color: lightgray;
+    }
 </style>
 
 
@@ -57,7 +66,7 @@
  </div>
 
 
-<div class="box">
+<div class="box-resume">
     <!-- Резюме -->
     <h3>Ваші резюме</h3>
     <section class="resumes">
@@ -70,8 +79,17 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ resume.title }}</h5>
-                        <p class="card-text">{{ resume.content }}</p>
+                        <p class="card-text">{{ resume.meta|truncatechars:100 }}</p>
                         <a href="{% url 'resume' resume.id %}" class="btn btn-primary">View</a>
+                        <div class="drropdown">
+                            <button class="btn btn-outline-light dropdown-toggle"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'download_resume' resume.id %}">Download Resume</a></li>
+                                <li><a class="dropdown-item" href="{% url 'copy-resume' resume.id %}">Copy Resume</a></li>
+                                <li><a class="dropdown-item" href="#Delete">Delete Resume</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -80,20 +98,7 @@
     </section>
  </div>
 
- <!--<ul class="list-group">
-     {% for resume in resumes %}
-         <li class="list-group-item">
-             <a href="{% url 'resume' resume.id %}">{{ resume.title }}</a>
-             <span class="badge bg-secondary">
-                 {{ resume.created_at }}
-             </span>
-         </li>
-     {% empty %}
-         <li class="list-group-item">У вас немає жодного резюме.</li>
-     {% endfor %}
- </ul>-->
-
-<div class="box">
+<div class="box-news">
     <!-- News on the one line -->
     <h3>Новини</h3>
     <section class="news">
@@ -103,8 +108,8 @@
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{ news.title }}</h5>
-                        <p class="card-text">{{  news.content }}</p>
-                        <a href="{% url 'news' news.id %}" class="card-link">Читати далі</a>
+                        <p class="card-text">{{  news.content|truncatechars:100 }}</p>
+                        <a href="{% url 'news' news.id %}"  class="btn btn-primary card-link">Читати далі</a>
                     </div>
                 </div>
             </div>
@@ -112,7 +117,4 @@
         </div>
     </section>
 </div>
-
-
-
 {% endblock %}

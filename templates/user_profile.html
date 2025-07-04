@@ -10,6 +10,33 @@
         padding: 20px;
         border-radius: 10px;
     }
+    
+    .container-accordion {
+        border-radius: 20px;
+    }
+
+    .accordion {
+        border: 1px dashed lightgray;
+        padding: 20px;
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+        box-shadow: 0.10rem 0.2rem 0.1rem rgb(0, 0, 0, 0.30);
+    }
+    
+
+    .accordion-active, .accordion:hover {
+        background-color: #ccc;
+    }
+
+    .panel {
+        padding: 10px 18px;
+        background-color: lightgrey;
+        display: none;
+        overflow: hidden;
+    }
 </style>
 
 <div class="mb-3 container">
@@ -41,7 +68,72 @@
             </span>
         </div>
     </div>
-
 </div>
 
+
+<section class="container-accordion">
+    <button class="accordion">Game Section</button>
+    <div class="panel">
+        <div class="d-grid gap-2 col-6 mx-auto" style="padding: 15px;">
+            <button id="openModal"  type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="Model" data-bs-whatever="comment">Game</button>
+            <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+            
+                    <div class="modal-content">
+                
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="ModalLabel">Modal Game</h1>
+                            <button id="closeModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+            
+                        <div class="modal-body">
+                            <label for="#player1">Player 1:</label>
+                            <progress id="player1" value="0" max="100"></progress>
+                            <br>
+                            <label for="#player2">Player 2:</label>
+                            <progress id="player2" value="0" max="100"></progress>
+
+                            <p>Winner: <span id="winner"></span></p>
+                            <button id="play">Play</button>
+                        </div>
+                
+                        <div class="modal-footer">
+                            <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel for User resumes -->
+    <button class="accordion">Resume Section</button>
+    <div class="panel">
+        <div class="vertical-scrolling" style="padding: 20px;  overflow-y: scroll; overflow-x: hidden; height: 300px;">
+            {% for resume in resumes %}
+            <div class="card">
+                <div class="card-header">
+                    Featured
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ resume.title }}</h5>
+                    <p class="card-text">{{ resume.content|truncatechars:100 }}</p>
+                    <a href="#" class="btn btn-primary">View</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    Featured
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ resume.title }}</h5>
+                    <p class="card-text">{{ resume.content|truncatechars:100 }}</p>
+                    <a href="#" class="btn btn-primary">View</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 {% endblock %}
