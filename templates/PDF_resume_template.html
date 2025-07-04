@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            padding: 30px;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .row {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-label + .form-label {
+            margin-top: 10px;
+        }
+
+        .col-md-4, .col-md-8 {
+            padding: 15px;
+        }
+
+        .col-md-4 {
+            background-color: #f8f9fa;
+            border: 1px dashed #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="content mt-5">
+        <div class="row mb-3">
+            <h2 class="form-label"> {{ resume.title }} - {{ resume.user.first_name }} {{ resume.user.last_name }}</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <p>{{ resume.phone }}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <p>{{ resume.address }}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="language" class="form-label">Languages</label>
+                    <p>{{ resume.language }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content/Informations</label>
+                    <p>{{ resume.content }}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="skills" class="form-label">Skills</label>
+                    <p>{{ resume.skills }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

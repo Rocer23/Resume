@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load static %}
 
 <style>
   .container {
@@ -57,12 +58,24 @@
 
         <div class="col-md-8">
             <div class="mb-3">
-                <label for="content" class="form-label">Content/Informations</label>
-                <label class="form-label">{{ resume.content }}</label>
+                <label for="content" class="form-label">Meta</label>
+                <label class="form-label">{{ resume.meta }}</label>
             </div>
-            <div class="bm-3">
+            <div class="mb-3">
+              <label for="education" class="form-label">Education</label>
+              <label class="form-label">{{ resume.education }}</label>
+            </div>
+            <div class="mb-3">
+              <label for="job_exp" class="form-label">Job experience</label>
+              <label class="form-label">{{ resume.job_exp }}</label>
+            </div>
+            <div class="mb-3">
                 <label for="skills" class="form-label">Skills</label>
                 <label class="form-label">{{ resume.skills }}</label>
+            </div>
+            <div class="mb-3">
+              <label for="skills" class="form-label">Addition information</label>
+              <label class="form-label">{{ resume.add_information }}</label>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from core.models import CustomUser, Resume, ResumeSection, TemplateResume, News, Comment
+from core.models import CustomUser, Resume, TemplateResume, News, Comment
 from core.forms import CustomUserCreationForm, CustomUserChangeForm
 
 
@@ -22,18 +22,10 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'created_at', 'updated_at')
+    list_display = ('user', 'meta', 'created_at', 'updated_at')
     search_fields = ('user__username', 'title')
     list_filter = ('created_at', 'updated_at')
     ordering = ('-created_at',)
-
-
-@admin.register(ResumeSection)
-class ResumeSectionAdmin(admin.ModelAdmin):
-    list_display = ('resume', 'title', 'order')
-    search_fields = ('resume__title', 'title')
-    list_filter = ('resume',)
-    ordering = ('resume', 'order')
 
 
 @admin.register(TemplateResume)
