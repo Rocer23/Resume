@@ -20,6 +20,8 @@ class CustomUser(AbstractUser):
 class Resume(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user_picture = models.ImageField(upload_to='user-pictures/', blank=True, null=True,
+                                     help_text='Upload a picture for the news article.')
     title = models.CharField(max_length=255)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)

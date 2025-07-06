@@ -118,18 +118,10 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ resume.title }}</h5>
-                    <p class="card-text">{{ resume.content|truncatechars:100 }}</p>
-                    <a href="#" class="btn btn-primary">View</a>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    Featured
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ resume.title }}</h5>
-                    <p class="card-text">{{ resume.content|truncatechars:100 }}</p>
-                    <a href="#" class="btn btn-primary">View</a>
+                    <p class="card-text">{{ resume.meta|truncatechars:100 }}</p>
+                    <a href="{% url 'resume' resume.id %}" class="btn btn-primary">View</a>
+                    <a href="{% url 'edit_resume' resume.id %}" class="btn btn-success">Edit Resume</a>
+                    <a href="{% url 'delete_resume' resume.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this resume?')">Delete Resume</a>
                 </div>
             </div>
             {% endfor %}
