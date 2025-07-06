@@ -33,8 +33,10 @@ class CustomUserChangeForm(UserChangeForm):
 class ResumeForm(forms.ModelForm):
     class Meta:
         model = Resume
-        fields = ['title', 'meta', 'phone', 'address', 'language', 'skills', 'education', 'job_exp', 'add_information']
+        fields = ['user_picture', 'title', 'meta', 'phone', 'address', 'language', 'skills', 'education', 'job_exp',
+                  'add_information']
         widgets = {
+            'user_picture': forms.FileInput(attrs={'class': "form-control photo-upload"}),
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter resume title'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter address'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter phone number'}),

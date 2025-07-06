@@ -134,10 +134,14 @@ def download_resume(request, resume_id):
     write(f"Phone: {resume.phone}")
     write(f"Address: {resume.address}")
     write(f"Languages: {resume.language}")
-    write(f"Skills: {resume.skills}")
 
     write("About Me: ", bold=True, space_before=20)
     write(resume.meta)
+    write(f"Job experience: ")
+    write(resume.job_exp)
+    write(f"Education: {resume.education}")
+    write(f"Skills: {resume.skills}")
+    write(f"Addition information: {resume.add_information}")
 
     p.showPage()
     p.save()
@@ -161,6 +165,28 @@ def make_copy(request, resume_id):
         add_information=original.add_information
     )
     return redirect("resume", resume_id=copy_resume.id)
+
+
+@login_required
+def edit_resume(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id)
+    if resume.user != request.user:
+        return redirect('index')
+
+    if request.method == "POST":
+        form = ResumeForm(request.POST, instance=resume)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = ResumeForm(instance=resume)
+    return render(request, 'edit_resume.html', {'form': form})
+
+
+def delete_resume(request, resume_id):
+    resumeD = get_object_or_404(Resume, id=resume_id)
+    resumeD.delete()
+    return redirect("index")
 
 
 @login_required(redirect_field_name='next', login_url='login')
@@ -196,6 +222,13 @@ def news(request, new_id):
     return render(request, 'news.html', {
         'news': news,
         'comments': comments
+    })
+
+
+def news_page(request):
+    news = News.objects.all()
+    return render(request, "news_page.html", {
+        'news': news
     })
 
 
@@ -235,3 +268,17 @@ def add_comment(request, new_id):
         'status': 'error',
         'message': 'Невірний метод'
     })
+
+
+def edit_comment(request, new_id, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id, news_id=new_id)
+    if request.method == "POST":
+        comment.text = request.POST.get('text', '')
+        comment.save()
+    return redirect('news', new_id=new_id)
+
+
+def delete_comment(request, new_id, comment_id):
+    commentD = get_object_or_404(Comment, id=comment_id, news_id=new_id)
+    commentD.delete()
+    return redirect('news', new_id=new_id)

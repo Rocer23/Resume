@@ -87,7 +87,8 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'download_resume' resume.id %}">Download Resume</a></li>
                                 <li><a class="dropdown-item" href="{% url 'copy-resume' resume.id %}">Copy Resume</a></li>
-                                <li><a class="dropdown-item" href="#Delete">Delete Resume</a></li>
+                                <li><a class="dropdown-item" href="{% url 'edit_resume' resume.id %}">Edit Resume</a></li>
+                                <li><a class="dropdown-item" href="{% url 'delete_resume' resume.id %}" onclick="return confirm('Are you sure you want to delete this resume?')">Delete Resume</a></li>
                             </ul>
                         </div>
                     </div>
@@ -108,7 +109,7 @@
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{ news.title }}</h5>
-                        <p class="card-text">{{  news.content|truncatechars:100 }}</p>
+                        <p class="card-text">{{  news.content|truncatechars:30 }}</p>
                         <a href="{% url 'news' news.id %}"  class="btn btn-primary card-link">Читати далі</a>
                     </div>
                 </div>

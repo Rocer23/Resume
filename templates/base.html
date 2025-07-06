@@ -40,9 +40,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'create-news' %}">Створити новину</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'news-page' %}">Новини</a>
+                        </li>
                     {% else %}
                         <li class="nav-link">
-                            <a class="nav-link" href="#news">Новини</a>
+                            <a class="nav-link" href="{% url 'news-page' %}">Новини</a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
