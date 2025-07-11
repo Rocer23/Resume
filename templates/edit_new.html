@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Створення Новин <a href="/" class="btn btn-outline-light" id="back-to-main">&leftarrow;</a> </h2>
+<h2>Створення Новин <a href="{% url 'news-page' %}" class="btn btn-outline-light" id="back-to-main">&leftarrow;</a> </h2>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <!--{{ form }}-->
+  
   <div class="mb-3">
     <label for="title" class="form-label">Title:</label>
-    <input type="text" id="title" name="title" class="form-control" required>
+    {{ form.title }}
 
     <label for="content" class="form-label">Content:</label>
-    <textarea name="content" id="content" cols="30" rows="10" class="form-control">
-      {% if news %}
-        {{ news.content }}
-      {% endif %}
-    </textarea>
+    {{ form.content }}
 
     <label for="picture" class="form-label gap-2">Picture:</label>
-    <input type="file" name="picture" id="picture"  class="form-control photo-upload" accept="picture/*">
+    {{ form.picture }}
+    
     <img id="the-picture" class="rounded mx-auto d-block" width="500px">
+    
     <div class="d-grid gap-2 col-6 mx-auto">
       <button type="submit" class="btn btn-primary">Зберегти новину</button>
     </div>
+  
   </div>
 </form>
 

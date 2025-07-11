@@ -9,7 +9,17 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ new.title }}</h5>
                     <p class="card-text">{{ new.content|truncatechars:100 }}</p>
-                    <a href="{% url 'news' new.id %}" class="btn btn-primary">Reading</a>
+                    <a href="{% url 'news' new.id %}" class="btn" id="custom-style-primary-btn">Reading</a>
+                    {% if user.is_staff%}
+                        <div class="drropdown">
+                            <button class="btn dropdown-toggle" id="custom-style-btn-dropdown"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'edit-new' new.id %}">Edit</a></li>
+                                <li><a class="dropdown-item" href="{% url 'delete-new' new.id %}" onclick="return confirm('Are you sure you want to delete this new?')">Delete</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

@@ -21,7 +21,7 @@
 
 
 
-<h2>News</h2>
+<h2>News <a href="/" class="btn btn-outline-light" id="back-to-main">&leftarrow;</a></h2>
 
 <div class="title">{{ news.title }}</div>
 <hr>
@@ -41,7 +41,7 @@
 <hr class="under-line">
 
 <div class="comment">
-    <button id="openModal"  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="Model" data-bs-whatever="comment">Add comment</button>
+    <button id="openModal"  type="button" class="btn custom-style-primary-btn" data-bs-toggle="modal" data-bs-target="Model" data-bs-whatever="comment">Add comment</button>
     <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             
@@ -65,7 +65,7 @@
                 
                 <div class="modal-footer">
                     <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="send-comment">Send comment</button>
+                    <button type="button" class="btn custom-style-primary-btn" id="send-comment">Send comment</button>
                 </div>
             
             </div>
@@ -76,15 +76,16 @@
         {% for comment in comments %}
             <p>
                 <strong>{{ comment.username.username }}</strong> ({{ comment.created_at }}): {{ comment.text }} 
-                
+                {% if request.user == comment.username %}
                 <div class="dropdown">
-                    <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn dropdown-toggle" id="custom-style-btn-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCommentModal{{ comment.id }}">Edit</a></li>
                         <li><a class="dropdown-item" href="{% url 'delete_comment' new_id=news.id comment_id=comment.id %}" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</a></li>
                     </ul>
                 </div>
+                {% endif %}
             </p>
 
             <!-- Modal for Edit -->

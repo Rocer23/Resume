@@ -2,59 +2,6 @@
 
 {% load static %}
 {% block content %}
-<style>
-    li {
-        list-style-type: none;
-    }
-
-    .slide-line {
-        display: flex;
-        overflow-x: scroll;
-        word-break: keep-all;
-        overflow-y: hidden;
-        white-space: auto;
-        scroll-padding: 20px;
-
-    }
-
-    .slide-card {
-        padding: 10px;
-    }
-    
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    .box-resume, .box-news {
-        margin: 50px auto;
-        padding: 20px;
-        background-color: #f8f9fa;
-        border-radius: 5px;
-    }
-    .resumes, .news{
-        padding: 20px;
-        border: 1px dashed lightgray;
-        border-radius: 10px;
-        box-shadow: 0.30rem 0.6rem 0.3rem rgba(0, 0, 0, 0.3);
-    }
-
-    h3 {
-        padding-top: 25px;
-    }
-
-    #btn-text {
-        text-decoration: none;
-        color: gray;
-    }
-
-    #btn-text:hover {
-        color: lightgray;
-    }
-</style>
-
-
 <!-- Головна сторінка -->
  <h2 style="text-align: center;">Ласкаво просимо до Резюме Билдер!</h2>
  <p style="text-align: center;">
@@ -62,7 +9,7 @@
  </p>
  <!-- Посилання на створення резюме -->
  <div class="text-center mt-4">
-     <a href="{% url 'create_resume' %}" class="btn btn-primary" id="create-resume-btn">Створити резюме</a>
+    <a href="{% url 'create_resume' %}" class="btn" id="custom-style-primary-btn">Створити резюме</a>
  </div>
 
 
@@ -71,8 +18,9 @@
     <h3>Ваші резюме</h3>
     <section class="resumes">
         <div class="container">
-            <div class="vertical-scrolling" style="overflow-y: scroll; overflow-x: hidden; height: 400px;">
+            <div class="vertical-scrolling" style="overflow-y: scroll; overflow-x: hidden; height: 500px;">
                 {% for resume in resumes %}
+                {% if resume.user == request.user %}
                 <div class="card">
                     <div class="card-header">
                         Featured
@@ -80,9 +28,9 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ resume.title }}</h5>
                         <p class="card-text">{{ resume.meta|truncatechars:100 }}</p>
-                        <a href="{% url 'resume' resume.id %}" class="btn btn-primary">View</a>
+                        <a href="{% url 'resume' resume.id %}" id="custom-style-primary-btn" class="btn">View</a>
                         <div class="drropdown">
-                            <button class="btn btn-outline-light dropdown-toggle"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn dropdown-toggle" id="custom-style-btn-dropdown"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'download_resume' resume.id %}">Download Resume</a></li>
@@ -93,11 +41,41 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
+                {% empty %}
+                    <p>У вас ще немає резюме</p>
                 {% endfor %}
             </div>
         </div>
     </section>
  </div>
+
+
+ <div class="other-resume">
+    <h3>Резюме інших користувачів</h3>
+    <section class="other-resume-section">
+        <div class="container">
+            <div class="vertical-scrolling" style="overflow-y: scroll; overflow-x: hidden; height: 400px;">
+                {% for resume in other_resume %}
+                    {% if resume.user == request.user %}
+                        {{ empty }}
+                    {% else %}
+                        <div class="card">
+                            <div class="card-header">
+                                {{ resume.user.username }}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ resume.title }}</h5>
+                                <p class="card-text">{{ resume.meta|truncatechars:100 }}</p>
+                                <a href="{% url 'resume' resume.id %}" id="custom-style-primary-btn" class="btn">View</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
 
 <div class="box-news">
     <!-- News on the one line -->
@@ -110,7 +88,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ news.title }}</h5>
                         <p class="card-text">{{  news.content|truncatechars:30 }}</p>
-                        <a href="{% url 'news' news.id %}"  class="btn btn-primary card-link">Читати далі</a>
+                        <a href="{% url 'news' news.id %}" id="custom-style-primary-btn" class="btn card-link">Читати далі</a>
                     </div>
                 </div>
             </div>
