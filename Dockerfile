@@ -24,4 +24,4 @@ ARG DJANGO_SUPERUSER_PASSWORD
 
 EXPOSE 8000
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh", "gunicorn", "Resume.wsgi", "-b", "0.0.0.0:8000" ]
