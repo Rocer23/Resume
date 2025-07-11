@@ -1,0 +1,111 @@
+li {
+    list-style-type: none;
+}
+
+
+.slide-line {
+    display: flex;
+    overflow-x: scroll;
+    word-break: keep-all;
+    overflow-y: hidden;
+    white-space: auto;
+    scroll-padding: 20px;
+}
+
+.slide-card {
+    padding: 10px;
+}
+    
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.box-resume, .box-news, .other-resume {
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.resumes, .news, .other-resume-section{
+    padding: 20px;
+    border: 1px dashed lightgray;
+    border-radius: 10px;
+    box-shadow: 0.30rem 0.6rem 0.3rem rgba(0, 0, 0, 0.3);
+}
+
+h3 {
+    padding-top: 25px;
+}
+
+#back-to-main {
+    width: 100px;
+}
+
+#back-to-main:hover {
+    box-shadow: 0.25rem 0.4rem 0.2rem rgba(0, 0, 0, 0.20);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+#custom-style-primary-btn, .custom-style-primary-btn {
+    text-decoration: none;
+    border: 1px solid rgba(40, 26, 236, 1);
+    background: transparent;
+    color: rgba(99, 91, 199, 1);
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+}
+
+#custom-style-primary-btn:hover, .custom-style-primary-btn:hover {
+    background: linear-gradient(90deg, rgba(40, 26, 236, 1) 0%, rgba(99, 91, 199, 1) 50%, rgba(44, 44, 120, 1) 100%);
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+#custom-style-success-btn {
+    text-decoration: none;
+    border: 1px solid rgba(2, 207, 2, 1);
+    background: transparent;
+    color: rgba(83, 163, 83, 1);
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+}
+
+
+#custom-style-success-btn:hover {
+    background: linear-gradient(90deg, rgba(2, 207, 2, 1) 0%, rgba(83, 163, 83, 1) 50%, rgba(10, 148, 10, 1) 100%);
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+#custom-style-warning-btn {
+    text-decoration: none;
+    border: 1px solid rgba(245, 34, 34, 1);
+    background: #fff;
+    color: rgba(222, 104, 104, 1);
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+
+}
+
+#custom-style-warning-btn:hover {
+    background: linear-gradient(90deg, rgba(245, 34, 34, 1) 0%, rgba(222, 104, 104, 1) 50%, rgba(176, 5, 5, 1) 100%);
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+#custom-style-btn-dropdown {
+    color: transparent;
+    background: transparent;
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+}
+
+#custom-style-btn-dropdown:hover {
+    color: #7e7e7e;
+    border: 1px solid #7e7e7e;
+    transition: 0.3s ease-in-out;
+}
+

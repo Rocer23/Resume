@@ -1,112 +1,115 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <!-- Резюме сторінка -->
-<h2>Редактор резюме</h2>
-<div class="container mt-5">
-    <form method="post" novalidate enctype="multipart/form-data">
-        <!-- Форма для резюме -->
-        {% csrf_token %}
-        
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label for="user_picture">User picture</label>
-                <input type="file" name="user_picture" class="form-control photo-upload" accept="user-picture/*">
-                <img id="the-picture" class="rounded mx-auto d-block" width="100px">
-            </div>
-            <!-- Заголовок, ім'я та прізвище -->
-            <div class="col-md-4">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" id="title" name="title" class="form-control" required>
-            </div>
+<div class="container mb-3">
+    <h2>Редактор резюме  <a class="btn btn-outline-light" id="back-to-main" href="/">&leftarrow;</a></h2>
+    <div class="container mt-5">
+        <form method="post" novalidate enctype="multipart/form-data">
+            <!-- Форма для резюме -->
+            {% csrf_token %}
 
-            <div class="col-md-4">
-                <label for="first-name" class="form-label">First Name</label>
-                <input type="text" id="first_name" name="first_name" class="form-control" value="{{ request.user.first_name }}" required>
-            </div>
-        
-            <div class="col-md-4">
-                <label for="last-name" class="form-label">Surname</label>
-                <input type="text" id="last_name" name="last_name" class="form-control" value="{{ request.user.last_name }}" required>
-            </div>
-        </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="user_picture">User picture</label>
+                    <input type="file" name="user_picture" class="form-control-sm photo-upload " accept="user-picture/*">
+                    <img id="the-picture" class="rounded mx-auto d-block" width="200px">
+                </div>
+                <!-- Заголовок, ім'я та прізвище -->
+                <div class="col-md-4">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
 
-        <div class="row">
-            <!-- Ліва колонка -->
-            <div class="col-md-4">
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="tel" id="phone" name="phone" class="form-control" required>
+                <div class="col-md-4">
+                    <label for="first-name" class="form-label">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="form-control" value="{{ request.user.first_name }}" required>
                 </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <input type="text" id="address" name="address" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="language" class="form-label">Languages</label>
-                    <textarea class="form-control" name="language" id="language" rows="2">
-                        {% if resume %}
-                            {{ resume.language }}
-                        {% endif %}
-                    </textarea>
+            
+                <div class="col-md-4">
+                    <label for="last-name" class="form-label">Surname</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" value="{{ request.user.last_name }}" required>
                 </div>
             </div>
 
-            <!-- Права колонка -->
-            <div class="col-md-8">
-                <div class="mb-3">
-                    <label for="content" class="form-label">Meta</label>
-                    <textarea class="form-control" name="meta" id="content" rows="4">
-                        {% if resume %}
-                            {{ resume.meta }}
-                        {% endif %}
-                    </textarea>
+            <div class="row">
+                <!-- Ліва колонка -->
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" id="address" name="address" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="language" class="form-label">Languages</label>
+                        <textarea class="form-control" name="language" id="language" rows="2">
+                            {% if resume %}
+                                {{ resume.language }}
+                            {% endif %}
+                        </textarea>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="education" class="form-label">Education</label>
-                    <textarea class="form-control" name="education" id="education" rows="4">
-                        {% if resume %}
-                            {{ resume.education }}
-                        {% endif %}
-                    </textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="job-experience" class="form-label">Job Experience</label>
-                    <textarea class="form-control" name="job_exp" id="job-experience" rows="4">
-                        {% if resume %}
-                            {{ resume.job_exp }}
-                        {% endif %}
-                    </textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="skills" class="form-label">Skills</label>
-                    <textarea class="form-control" name="skills" id="skills" rows="4">
-                        {% if resume %}
-                            {{ resume.skills }}
-                        {% endif %}
-                    </textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="addition-information" class="form-label">Addition information</label>
-                    <textarea class="form-control" name="add_information" id="add-information" rows="4">
-                        {% if resume %}
-                            {{ resume.add_information }}
-                        {% endif %}
-                    </textarea>
+
+                <!-- Права колонка -->
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Meta</label>
+                        <textarea class="form-control" name="meta" id="content" rows="4">
+                            {% if resume %}
+                                {{ resume.meta }}
+                            {% endif %}
+                        </textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="education" class="form-label">Education</label>
+                        <textarea class="form-control" name="education" id="education" rows="4">
+                            {% if resume %}
+                                {{ resume.education }}
+                            {% endif %}
+                        </textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="job-experience" class="form-label">Job Experience</label>
+                        <textarea class="form-control" name="job_exp" id="job-experience" rows="4">
+                            {% if resume %}
+                                {{ resume.job_exp }}
+                            {% endif %}
+                        </textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="skills" class="form-label">Skills</label>
+                        <textarea class="form-control" name="skills" id="skills" rows="4">
+                            {% if resume %}
+                                {{ resume.skills }}
+                            {% endif %}
+                        </textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addition-information" class="form-label">Addition information</label>
+                        <textarea class="form-control" name="add_information" id="add-information" rows="4">
+                            {% if resume %}
+                                {{ resume.add_information }}
+                            {% endif %}
+                        </textarea>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="d-grid mt-4">
-            <button type="submit" class="btn btn-success btn-lg">Зберегти резюме</button>
-            {% if form.error %}
-                <div class="alert alert-danger">
-                    {{ form.errors }}
-                </div>
-            {% endif %}
-        </div>
-        
-    </form>
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-lg" id="custom-style-success-btn">Зберегти резюме</button>
+                {% if form.error %}
+                    <div class="alert alert-danger">
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+        </form>
+    </div>
 </div>
 
 <script>

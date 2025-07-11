@@ -1,10 +1,9 @@
-from django.contrib.auth import login
-from django.http import JsonResponse, HttpResponse, FileResponse
+from django.contrib.auth import login, update_session_auth_hash
+from django.http import JsonResponse, FileResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
 from reportlab.lib.utils import simpleSplit
 from Resume.settings import FONT_PATH
-from .forms import ResumeForm, NewsForm, CustomUserCreationForm
+from .forms import ResumeForm, NewsForm, CustomUserCreationForm, PasswordChangingForm
 from django.contrib.auth.decorators import login_required
 from core.models import Resume, CustomUser, News, Comment
 from django.views.decorators.csrf import csrf_exempt
@@ -23,12 +22,14 @@ def index(request):
     }
     # show all resumes on index
     resumes = Resume.objects.all()
+    other_resume = Resume.objects.all()[:10]
 
     # show all news on index
     news_list = News.objects.all()
     return render(request, 'index.html', {
         'context': context,
         'resumes': resumes,
+        "other_resume": other_resume,
         'news_list': news_list,
     })
 
@@ -48,8 +49,23 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 
+def change_password(request, user_id):
+    if request.user.id != user_id:
+        return HttpResponseForbidden("You can't change someone else's password.")
+
+    if request.method == "POST":
+        form = PasswordChangingForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('user-profile')
+    else:
+        form = PasswordChangingForm(user=request.user)
+    return render(request, 'use_profile.html', {"form": form})
+
+
 # створення резюме
-@login_required
+@login_required(login_url="login")
 def create_resume(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
@@ -77,23 +93,23 @@ def create_resume(request):
 
 # Сторінка резюме
 def resume(request, resume_id):
-    try:
-        resumes = Resume.objects.get(id=resume_id, user=request.user)
-        user = resumes.user
-    except Resume.DoesNotExist:
+    resume = get_object_or_404(Resume, id=resume_id)
+
+    if resume is None:
         return redirect('index')
+
     return render(request, 'resume.html', {
-        'user': user,
-        'resume': resumes,
-        'title': resumes.title,
-        "address": resumes.address,
-        'phone': resumes.phone,
-        'description': resumes.meta,
-        'education': resumes.education,
-        'job_exp': resumes.job_exp,
-        "languages": resumes.language,
-        "skills": resumes.skills,
-        'add_information': resumes.add_information
+        'user': resume.user,
+        'resume': resume,
+        'title': resume.title,
+        "address": resume.address,
+        'phone': resume.phone,
+        'description': resume.meta,
+        'education': resume.education,
+        'job_exp': resume.job_exp,
+        "languages": resume.language,
+        "skills": resume.skills,
+        'add_information': resume.add_information,
     })
 
 
@@ -167,11 +183,8 @@ def make_copy(request, resume_id):
     return redirect("resume", resume_id=copy_resume.id)
 
 
-@login_required
 def edit_resume(request, resume_id):
     resume = get_object_or_404(Resume, id=resume_id)
-    if resume.user != request.user:
-        return redirect('index')
 
     if request.method == "POST":
         form = ResumeForm(request.POST, instance=resume)
@@ -189,7 +202,7 @@ def delete_resume(request, resume_id):
     return redirect("index")
 
 
-@login_required(redirect_field_name='next', login_url='login')
+@login_required(login_url='login')
 def user_profile(request, user_id):
     try:
         user = CustomUser.objects.get(id=user_id)
@@ -232,8 +245,25 @@ def news_page(request):
     })
 
 
-@login_required(redirect_field_name='next', login_url='login')
+def edit_new(request, new_id):
+    news = get_object_or_404(News, id=new_id)
+    if request.method == "POST":
+        form = NewsForm(request.POST, request.FILES, instance=news)
+        if form.is_valid():
+            form.save()
+            return redirect('news-page')
+    else:
+        form = NewsForm(instance=news)
+    return render(request, 'edit_new.html', {'form': form})
+
+
+def delete_new(request, new_id):
+    newD = get_object_or_404(News, id=new_id)
+    newD.delete()
+    return redirect('news-page')
+
 @csrf_exempt
+@login_required(login_url="login")
 def add_comment(request, new_id):
     if request.method == "POST":
         text = request.POST.get('text')
