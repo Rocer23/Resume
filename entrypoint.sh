@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "📦 Activating migrate.."
 python manage.py migrate --noinput
@@ -18,7 +19,7 @@ email = os.environ.get("DJANGO_SUPERUSER_EMAIL")
 password = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
 
 if all([username, email, password]):
-    if not User.objects.filter(username=username).exist():
+    if not User.objects.filter(username=username).exists():
         User.objects.create_superuser(username, email, password)
         print("✅ Super user create.")
     else:
@@ -29,4 +30,5 @@ else:
 EOF
 
 echo "🚀 Starting Gunincorn..."
-exec gunicorm Resume.wsgi:application -b 0.0.0.0:8000
+exec gunicorn Resume.wsgi:application -b 0.0.0.0:8000
+exec "$@"
