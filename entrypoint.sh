@@ -10,16 +10,22 @@ echo "🛠️ Creating superuser, if he is exist... "
 python manage.py shell <<EOF
 import os
 from django.contrib.auth import get_user_model
-User = get_user_model()
-username = os.environ.get("DJANGO_SUPERUSER_USERNAME", "admin")
-email = os.environ.get("DJANGO_SUPERUSER_EMAIL", "admin@example.com")
-password = os.environ.get("DJANGO_SUPERUSER_PASSWORD", "admin123")
 
-if not User.objects.filter(username=username).exists():
-    User.objects.create_superuser(username, email, password)
-    print("✅ Super user create.")
+User = get_user_model()
+
+username = os.environ.get("DJANGO_SUPERUSER_USERNAME")
+email = os.environ.get("DJANGO_SUPERUSER_EMAIL")
+password = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
+
+if all([username, email, password]):
+    if not User.objects.filter(username=username).exist():
+        User.objects.create_superuser(username, email, password)
+        print("✅ Super user create.")
+    else:
+        print("ℹ️ Super user already exist.")
+    
 else:
-    print("ℹ️ Super user already exist.")
+    print("❌ DJANGO_SUPERUSER*. Environment not set - user not created.")
 EOF
 
 echo "🚀 Starting Gunincorn..."
