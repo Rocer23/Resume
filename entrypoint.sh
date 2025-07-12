@@ -31,4 +31,3 @@ EOF
 
 echo "🚀 Starting Gunincorn..."
 exec gunicorn Resume.wsgi:application -b 0.0.0.0:8000
-exec "$@"
