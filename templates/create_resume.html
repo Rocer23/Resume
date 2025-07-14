@@ -4,18 +4,24 @@
 
 <!-- Резюме сторінка -->
 <div class="container mb-3">
-    <h2>Редактор резюме  <a class="btn btn-outline-light" id="back-to-main" href="/">&leftarrow;</a></h2>
+    <h2>Редактор резюме  <a class="btn btn-outline-light" id="back-to-main" href="/">&leftarrow;</a></h2>    
     <div class="container mt-5">
+
+        <div class="alert alert-primary" role="alert">
+            To create a resume, Please ensure your name and surname are set in your <strong><a href="{% url 'user-profile' user.id %}" style="text-decoration: none;">profile</a></strong>.
+        </div>
+
         <form method="post" novalidate enctype="multipart/form-data">
             <!-- Форма для резюме -->
             {% csrf_token %}
+            <div class="col-md-4">
+                <label for="user_picture">User picture</label>
+                <input type="file" name="user_picture" class="form-control-sm photo-upload " accept="user-picture/*">
+                <img id="the-picture" class="rounded mx-auto d-block" width="200px">
+            </div>
 
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="user_picture">User picture</label>
-                    <input type="file" name="user_picture" class="form-control-sm photo-upload " accept="user-picture/*">
-                    <img id="the-picture" class="rounded mx-auto d-block" width="200px">
-                </div>
+            <div class="row g-3 mb-3">
+                
                 <!-- Заголовок, ім'я та прізвище -->
                 <div class="col-md-4">
                     <label for="title" class="form-label">Title</label>
@@ -24,18 +30,18 @@
 
                 <div class="col-md-4">
                     <label for="first-name" class="form-label">First Name</label>
-                    <input type="text" id="first_name" name="first_name" class="form-control" value="{{ request.user.first_name }}" required>
+                    <input type="text" id="first_name" name="first_name" class="form-control" aria-label="Disabled input example" value="{{ request.user.first_name }}" disabled readonly>
                 </div>
             
                 <div class="col-md-4">
                     <label for="last-name" class="form-label">Surname</label>
-                    <input type="text" id="last_name" name="last_name" class="form-control" value="{{ request.user.last_name }}" required>
+                    <input type="text" id="last_name" name="last_name" class="form-control" aria-label="Disabled input example" value="{{ request.user.last_name }}" disabled readonly>
                 </div>
             </div>
 
             <div class="row">
                 <!-- Ліва колонка -->
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
                         <input type="tel" id="phone" name="phone" class="form-control" required>
@@ -52,10 +58,18 @@
                             {% endif %}
                         </textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="skills" class="form-label">Skills</label>
+                        <textarea class="form-control" name="skills" id="skills" rows="2">
+                            {% if resume %}
+                                {{ resume.skills }}
+                            {% endif %}
+                        </textarea>
+                    </div>
                 </div>
 
                 <!-- Права колонка -->
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="mb-3">
                         <label for="content" class="form-label">Meta</label>
                         <textarea class="form-control" name="meta" id="content" rows="4">
@@ -77,14 +91,6 @@
                         <textarea class="form-control" name="job_exp" id="job-experience" rows="4">
                             {% if resume %}
                                 {{ resume.job_exp }}
-                            {% endif %}
-                        </textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="skills" class="form-label">Skills</label>
-                        <textarea class="form-control" name="skills" id="skills" rows="4">
-                            {% if resume %}
-                                {{ resume.skills }}
                             {% endif %}
                         </textarea>
                     </div>

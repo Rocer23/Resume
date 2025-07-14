@@ -86,7 +86,10 @@ def create_resume(request):
             resume.save()
             return redirect('index')
     else:
-        form = ResumeForm()
+        form = ResumeForm(initial={
+            "first_name": request.user.first_name,
+            "last_name": request.user.last_name
+        })
 
     return render(request, 'create_resume.html', {'form': form})
 
@@ -205,15 +208,25 @@ def delete_resume(request, resume_id):
 @login_required(login_url='login')
 def user_profile(request, user_id):
     try:
-        user = CustomUser.objects.get(id=user_id)
+        profile_user = CustomUser.objects.get(id=user_id)
     except CustomUser.DoesNotExist:
         return redirect('index')
-    resumes = Resume.objects.filter(user=user)
+    
+    if request.user != profile_user:
+        return redirect('index')
+    
+    if request.method == "POST":
+        profile_user.first_name = request.POST.get('first_name', '').strip()
+        profile_user.last_name = request.POST.get('last_name', '').strip()
+        profile_user.save()
+        return redirect('user-profile', user_id=profile_user.id)
+    
+    resumes = Resume.objects.filter(user=profile_user)
     return render(request, 'user_profile.html', {
-        'user': user,
+        'profile_user': profile_user,
         'resumes': resumes,
-        'title': f"{user.username}'s Profile",
-        'description': f"Profile page of {user.username}"
+        'title': f"{profile_user.username}'s Profile",
+        'description': f"Profile page of {profile_user.username}"
     })
 
 

@@ -9,55 +9,67 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-bdoy-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'index' %}">Резюме билдер</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            
+            <a class="navbar-brand" href="{% url 'index' %}">Resume Builder</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav">
+
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
                     </li>
+                    
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <form action="{% url 'logout' %}" method="post" class="nav-link" style="display: inline; padding: 0; margin: 0;">
-                                {% csrf_token %}
-                                <button type="submit" class="nav-link btn btn-link" style="color: inherit; text-decoration: none;">Logout</button>
-                            </form>
-                        </li>
+                    <li class="nav-item">
+                        <form action="{% url 'logout' %}" method="post" class="nav-link" >
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link" style="padding: 0; margin: 0; text-decoration: none; color: inherit;">Logout</button>
+                        </form>
+                    </li>
                     {% else %}
-                        <li class="nav-item" id="login-btn">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
-                        </li>
-                        <li class="nav-item" id="register-btn">
-                            <a class="nav-link" href="{% url 'register' %}">Register</a>
-                        </li>
+                    <li class="nav-item">
+                        <a  class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a  class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+
+
+                    {% if user.is_staff or user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create-news' %}">Create new</a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" href="{% url 'news-page' %}">News</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item"> 
+                        <a class="nav-link" href="{% url 'news-page' %}">News</a>
+                    </li>
                     {% endif %}
                     
-                    {% if user.is_staff or user.is_superuser %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'create-news' %}">Створити новину</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'news-page' %}">Новини</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-link">
-                            <a class="nav-link" href="{% url 'news-page' %}">Новини</a>
-                        </li>
-                    {% endif %}
+
+                    {% if user and user.id %}
                     <li class="nav-item">
-                        {% if user and user.id %}
-                            <a class="nav-link" href="{% url 'user-profile' user.id %}">User profile</a>
-                        {% endif %}
+                        <a class="nav-link" href="{% url 'user-profile' user.id %}">User profile</a>
                     </li>
+                    {% endif %}
+
                 </ul>
+
             </div>
+        
         </div>
     </nav>
-
+       
     <div class="container mt-4" style="padding-bottom: 40px;">
         {% block content %}
         <!-- Content will be injected here -->

@@ -14,18 +14,25 @@
 </style>
 
 <div class="mb-3 container">
-    <h2>User Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h2>User Profile <a href="/" class="btn btn-outline-light" id="back-to-main">&leftarrow;</a></h2>
     <div class="row g-auto align-items-center">
-        <label class="form-label">UserName: {{ user.username }}</label>
-        <label for="email" class="form-label">Email: {{ user.email }}</label>
+        <label class="form-label">UserName: {{ profile_user.username }}</label>
+        <label for="email" class="form-label">Email: {{ profile_user.email }}</label>
     </div>
     
     <div class="row mb-3">
         <div class="col-md-4">
-            <label for="name" class="form-label">Name: {{ user.first_name }}</label>
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ profile_user.first_name }}">
         </div>
         <div class="col-md-4">
-            <label for="surname" class="form-label">Surname: {{ user.last_name }}</label>
+            <label for="surname" class="form-label">Surname:</label>
+            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ profile_user.last_name }}">
+        </div>
+        <div class="d-grad gap-2">
+            <button type="submit" class="btn custom-style-primary-btn">Зберегти</button>
         </div>
     </div>
 
@@ -39,6 +46,7 @@
             </span>
         </div>
     </div>
+    </form>
 </div>
 
 <div class="container mb-3">
