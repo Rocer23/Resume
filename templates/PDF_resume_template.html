@@ -2,74 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Резюме</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
-            padding: 30px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            padding: 0;
         }
 
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .left, .right {
+            padding: 20px;
+        }
+        
+        .left {
+            width: 30%;
+            background: #f4f4f4;
         }
 
-        .row {
+        .right {
+            width: 70%;
+        }
+
+        .photo {
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 0;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #666;
+        }
+
+        .section {
             margin-bottom: 20px;
         }
 
-        .form-label {
+        .label {
             font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .form-label + .form-label {
-            margin-top: 10px;
-        }
-
-        .col-md-4, .col-md-8 {
-            padding: 15px;
-        }
-
-        .col-md-4 {
-            background-color: #f8f9fa;
-            border: 1px dashed #dee2e6;
         }
     </style>
 </head>
 <body>
-    <div class="content mt-5">
-        <div class="row mb-3">
-            <h2 class="form-label"> {{ resume.title }} - {{ resume.user.first_name }} {{ resume.user.last_name }}</h2>
+    <div class="left">
+        {% if resume.user_picture %}
+        <img src="{{ user_picture }}" alt="фото" class="photo">
+        {% else %}
+            {{ empty }}
+        {% endif %}
+
+        <div class="section">
+            <p class="label">Phone:</p>
+            <p>{{ resume.phone }}</p>
+            <p class="label">Email:</p>
+            <p>{{ resume.email }}</p>
         </div>
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <p>{{ resume.phone }}</p>
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <p>{{ resume.address }}</p>
-                </div>
-                <div class="mb-3">
-                    <label for="language" class="form-label">Languages</label>
-                    <p>{{ resume.language }}</p>
-                </div>
-            </div>
-
-            <div class="col-md-8">
-                <div class="mb-3">
-                    <label for="content" class="form-label">Content/Informations</label>
-                    <p>{{ resume.content }}</p>
-                </div>
-                <div class="mb-3">
-                    <label for="skills" class="form-label">Skills</label>
-                    <p>{{ resume.skills }}</p>
-                </div>
-            </div>
+        <div class="section">
+            <p class="label">Skills</p>
+            <ul>
+                {% for skill in resume.skills %}
+                <li>{{ skill }}</li>
+            </ul>
         </div>
+
+        <div class="section">
+            <p class="label">About Me:</p>
+            <p>{{ resume.meta }}</p>
+        </div>
+    </div>
+
+    <div class="right">
+        <h1>{{ resume.user.first_name }} {{ resume.user.last_name }}</h1>
+        <h2>{{ resume.title }}</h2>
+
+        <div class="section">
+            <p class="label">Job experience:</p>
+            <p>{{ resume.job_exp }}</p>
+        </div>
+
+        <div class="section">
+            <p class="label">Education:</p>
+            <p>{{ resume.education }}</p>
+        </div>
+
     </div>
 </body>
 </html>

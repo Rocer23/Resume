@@ -1,15 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var commentModal = new bootstrap.Modal(document.getElementById('Modal'));
-    var btn = document.getElementById('openModal');
-    var closeBtn = document.getElementById('closeModal');
-
-    btn.addEventListener('click', function() {
-        commentModal.show();
-    });
-    closeBtn.addEventListener('click', function() {
-        commentModal.hide();
-    });
-});
 
 // Comments function
 document.addEventListener("DOMContentLoaded", function() {
@@ -39,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 commentsBlock.prepend(newCommentElement);
 
                 document.getElementById('comment-text').value = '';
-                const modal = bootstrap.Modal.getInstance(document.getElementById("Modal"));
+                const modal = bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
                 modal.hide();
             } else{
                 alert("Error: " + data.message);

@@ -7,23 +7,31 @@
     <form method="post" novalidate enctype="multipart/form-data">
         <!-- Форма для резюме -->
         {% csrf_token %}
-        
-        <div class="row mb-3">
+
+        <div class="col-md-4">
+            <label for="user_picture">User picture</label>
+            {{ form.user_picture }}
+            <img id="the-picture" class="rounded mx-auto d-block" width="200px">
+        </div>
+
+
+        <div class="row g-3 mb-3">
+                
             <!-- Заголовок, ім'я та прізвище -->
             <div class="col-md-4">
                 <label for="title" class="form-label">Title</label>
                 {{ form.title }}
             </div>
-
             <div class="col-md-4">
                 <label for="first-name" class="form-label">First Name</label>
-                <input type="text" id="first_name" name="first_name" class="form-control" value="{{ request.user.first_name }}" required>
+                <input type="text" id="first_name" name="first_name" class="form-control" aria-label="Disabled input example" value="{{ request.user.first_name }}" disabled readonly>
             </div>
         
             <div class="col-md-4">
                 <label for="last-name" class="form-label">Surname</label>
-                <input type="text" id="last_name" name="last_name" class="form-control" value="{{ request.user.last_name }}" required>
+                <input type="text" id="last_name" name="last_name" class="form-control" aria-label="Disabled input example" value="{{ request.user.last_name }}" disabled readonly>
             </div>
+        
         </div>
 
         <div class="row">
@@ -41,6 +49,10 @@
                     <label for="language" class="form-label">Languages</label>
                     {{ form.language }}
                 </div>
+                <div class="mb-3">
+                    <label for="skills" class="form-label">Skills</label>
+                    {{ form.skills }}
+                </div>
             </div>
 
             <!-- Права колонка -->
@@ -56,10 +68,6 @@
                 <div class="mb-3">
                     <label for="job-experience" class="form-label">Job Experience</label>
                     {{ form.job_exp }}
-                </div>
-                <div class="mb-3">
-                    <label for="skills" class="form-label">Skills</label>
-                    {{ form.skills }}
                 </div>
                 <div class="mb-3">
                     <label for="addition-information" class="form-label">Addition information</label>

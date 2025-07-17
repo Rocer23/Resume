@@ -46,11 +46,11 @@
         
       <div class="mb-3">
       
-        {% if resume.user_picture %}
+        <div od="show-picture">
+          {% if resume.user_picture %}
             <img src="{{ resume.user_picture.url }}" class="rounded" width="150px">
-        {% else %}
-            {{ empty }}
-        {% endif %}
+          {% endif %}
+        </div>
       
       </div>
           

@@ -79,7 +79,7 @@ def create_resume(request):
         except Exception as e:
             print(f"Помилка при збереженні користувача: {e}")
 
-        form = ResumeForm(request.POST)
+        form = ResumeForm(request.POST, request.FILES)
         if form.is_valid():
             resume = form.save(commit=False)
             resume.user = request.user
@@ -105,6 +105,7 @@ def resume(request, resume_id):
         'user': resume.user,
         'resume': resume,
         'title': resume.title,
+        'user_picture': resume.user_picture,
         "address": resume.address,
         'phone': resume.phone,
         'description': resume.meta,
@@ -173,6 +174,7 @@ def make_copy(request, resume_id):
     original = get_object_or_404(Resume, id=resume_id)
     copy_resume = Resume.objects.create(
         user=request.user,
+        user_picture=original.user_picture,
         title=original.title,
         address=original.address,
         phone=original.phone,
@@ -190,7 +192,7 @@ def edit_resume(request, resume_id):
     resume = get_object_or_404(Resume, id=resume_id)
 
     if request.method == "POST":
-        form = ResumeForm(request.POST, instance=resume)
+        form = ResumeForm(request.POST, request.FILES, instance=resume)
         if form.is_valid():
             form.save()
             return redirect('index')
