@@ -1,7 +1,7 @@
 # form for resume creation
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
-from .models import Resume, News, CustomUser, FirstName_LastName
+from .models import Resume, News, CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
