@@ -1,9 +1,9 @@
 from django.contrib.auth import login, update_session_auth_hash
-from django.http import JsonResponse, FileResponse, HttpResponseForbidden
+from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from reportlab.lib.utils import simpleSplit
 from Resume.settings import FONT_PATH
-from .forms import ResumeForm, NewsForm, CustomUserCreationForm, PasswordChangingForm
+from .forms import ResumeForm, NewsForm, CustomUserCreationForm, ChangingPasswordForm
 from django.contrib.auth.decorators import login_required
 from core.models import Resume, CustomUser, News, Comment
 from django.views.decorators.csrf import csrf_exempt
@@ -50,19 +50,27 @@ def register(request):
 
 
 def change_password(request, user_id):
-    if request.user.id != user_id:
-        return HttpResponseForbidden("You can't change someone else's password.")
-
+    try:
+        profile_user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return redirect('index')
+    
     if request.method == "POST":
-        form = PasswordChangingForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            return redirect('user-profile')
-    else:
-        form = PasswordChangingForm(user=request.user)
-    return render(request, 'use_profile.html', {"form": form})
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_new_password')
 
+        if new_password != confirm_password:
+            return redirect('index')
+
+        if not profile_user.check_password(current_password):
+            return redirect('index')
+
+        profile_user.set_password(new_password)
+        profile_user.save()
+        update_session_auth_hash(request, profile_user)
+    
+    return redirect('index')
 
 # створення резюме
 @login_required(login_url="login")

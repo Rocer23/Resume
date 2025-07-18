@@ -2,12 +2,12 @@
 
 {% block content %}
 <!-- Резюме сторінка -->
-<h2>Редактор резюме</h2>
-<div class="container mt-5">
+<div class="container mt-5" style="border: 1px solid lightgray; box-shadow: 0.30rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1); border-radius: 15px;">
+    <h2>Редактор резюме <a href="/" class="btn btn-outline-light" id="back-to-main">&leftarrow;</a></h2>
     <form method="post" novalidate enctype="multipart/form-data">
         <!-- Форма для резюме -->
         {% csrf_token %}
-
+        
         <div class="col-md-4">
             <label for="user_picture">User picture</label>
             {{ form.user_picture }}
@@ -77,7 +77,7 @@
         </div>
         
         <div class="d-grid mt-4">
-            <button type="submit" class="btn btn-success btn-lg">Зберегти резюме</button>
+            <button type="submit" class="btn custom-style-success-btn btn-lg">Зберегти резюме</button>
             {% if form.error %}
                 <div class="alert alert-danger">
                     {{ form.errors }}

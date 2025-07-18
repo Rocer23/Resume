@@ -25,18 +25,20 @@
 
 <div class="title">{{ news.title }}</div>
 <hr>
-<p class="content">
-    <span>
-        {{ news.content }}
-    </span>
-    <span id="show-picture">
-        <div class="text-center">
-            {% if news.picture %}
-                <img src="{{ news.picture.url }}" class="rounded" alt="">
-            {% endif %}
-        </div>
-    </span>
-</p>
+<div class="vertical-scrolling" style="overflow-y: scroll; overflow-x: hidden; height: 300px;">
+    <p class="content">
+        <span>
+            {{ news.content }}
+        </span>
+        <span id="show-picture">
+            <div class="text-center">
+                {% if news.picture %}
+                    <img src="{{ news.picture.url }}" class="rounded" alt="">
+                {% endif %}
+            </div>
+        </span>
+    </p>
+</div>
 
 <hr class="under-line">
 

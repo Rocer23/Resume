@@ -23,6 +23,7 @@ urlpatterns = [
     path('resume/<uuid:resume_id>/download/', views.download_resume, name='download'),
     path('resume/<uuid:resume_id>/delete/', views.delete_resume, name='delete_resume'),
     path('user-profile/<uuid:user_id>/', views.user_profile, name='user-profile'),
+    path('user-profile/<uuid:user_id>/change-password/', views.change_password, name='change-password'),
     path('create-news/', views.create_news, name="create-news"),
     path('news-page/', views.news_page, name='news-page'),
     path('news/<uuid:new_id>/', views.news, name='news'),

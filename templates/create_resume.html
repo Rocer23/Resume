@@ -3,18 +3,24 @@
 {% block content %}
 
 <!-- Резюме сторінка -->
-<div class="container mb-3">
+<div class="container mb-3" style="border: 1px solid lightgray; box-shadow: 0.30rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1); border-radius: 15px;">
     <h2>Редактор резюме  <a class="btn btn-outline-light" id="back-to-main" href="/">&leftarrow;</a></h2>    
     <div class="container mt-5">
 
-        <div class="alert alert-primary" role="alert">
+        <div class="form-check form-switch">
+            <input type="checkbox" role="switch" id="switchCheckDefault" class="form-check-input">
+            <label for="switchCheckDefault" class="form-check-label">
+                Use User profile's name and surname
+            </label>
+        </div>
+        
+        <div class="alert alert-primary d-none" role="alert">
             To create a resume, Please ensure your name and surname are set in your <strong><a href="{% url 'user-profile' user.id %}" style="text-decoration: none;">profile</a></strong>.
         </div>
 
         <form method="post" novalidate enctype="multipart/form-data">
             <!-- Форма для резюме -->
             {% csrf_token %}
-            {{ form }}
             <div class="col-md-4">
                 <label for="user_picture">User picture</label>
                 <input type="file" name="user_picture" class="form-control-sm photo-upload " accept="user-picture/*">
@@ -118,4 +124,17 @@
         </form>
     </div>
 </div>
+
+<script>
+    const switchInput = document.getElementById('switchCheckDefault');
+    const alertBox = document.querySelector('.alert');
+
+    switchInput.addEventListener('change', function() {
+        if (this.checked) {
+            alertBox.classList.remove('d-none');
+        } else {
+            alertBox.classList.add('d-none');
+        }
+    });
+</script>
 {% endblock %}

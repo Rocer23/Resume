@@ -32,7 +32,7 @@
             <input type="text" id="last_name" name="last_name" class="form-control" value="{{ profile_user.last_name }}">
         </div>
         <div class="d-grad gap-2">
-            <button type="submit" class="btn custom-style-primary-btn">Зберегти</button>
+            <button type="submit" class="btn custom-style-primary-btn">Save</button>
         </div>
     </div>
 
@@ -42,11 +42,64 @@
         </div>
         <div class="col-auto">
             <span id="passwordHelpInline" class="form-text">
-                <a href="#Change-password" class="btn" id="custom-style-primary-btn">Change password</a>
+                <!-- btn for trigger modal and change password -->
+                <button type="button" class="btn custom-style-primary-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Change password
+                </button>
             </span>
         </div>
     </div>
     </form>
+</div>
+
+<!-- Modal for change password -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Change Password</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            
+            <form method="post" action="{% url 'change-password' user.id %}">
+                {% csrf_token %}
+
+                <div class="modal-body">
+        
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Current Password:</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password:</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_new_password">confirm New Password:</label>
+                        <input type="password" class="form-control" id="confirm_new_password" name="confirm_new_password" required>
+                    </div>
+                
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn custom-style-secondary-btn" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn custom-style-primary-btn">Save Changes</button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
 
 <div class="container mb-3">
