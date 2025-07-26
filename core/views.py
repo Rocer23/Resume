@@ -12,7 +12,6 @@ from reportlab.lib.colors import HexColor
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from xhtml2pdf import pisa
 
 from Resume import settings
 from Resume.settings import FONT_PATH
