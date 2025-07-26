@@ -61,45 +61,13 @@
                             <button class="btn dropdown-toggle" id="custom-style-btn-dropdown"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             </button>
                             <ul class="dropdown-menu">
-                                <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Download resume</button></li>
-                                <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Resume func</button></li>
+                                <li><a class="dropdown-item" href="{% url 'download-resume' resume.id %}">Downolad Reume</a></li>
+                                <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Resume func</button></li>
                             </ul>
-                        </div>
-                        <!-- Modal for download resume -->
-                        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
-                            <div class="modal-dialog">
-                            
-                                <div class="modal-content">
-                                
-                                    <div class="modal-header">
-                                    
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Download Resume</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    
-                                    </div>
-                                
-                                    <div class="modal-body">
-                                    
-                                        <a class="btn" href="#" id="flex-block" onclick="window.alert('Sorry, this function does not work yet.');">With photo</a>
-                                        <a class="btn" href="{% url 'download' resume.id %}" id="flex-block">Without photo</a>
-                                    
-                                    </div>
-                                
-                                    <div class="modal-footer">
-                                    
-                                        <button type="button" class="btn custom-style-secondary-btn" data-bs-dismiss="modal">Close</button>
-                                    
-                                    </div>
-                                
-                                </div>
-                            
-                            </div>
-
                         </div>
 
                         <!-- Modal for resume function -->
-                        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModallabel" aria-hidden="true">
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModallabel" aria-hidden="true">
                         
                             <div class="modal-dialog">
                             

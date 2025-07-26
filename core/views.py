@@ -1,17 +1,23 @@
-from django.contrib.auth import login, update_session_auth_hash
-from django.http import JsonResponse, FileResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from reportlab.lib.utils import simpleSplit
-from Resume.settings import FONT_PATH
-from .forms import ResumeForm, NewsForm, CustomUserCreationForm, ChangingPasswordForm
-from django.contrib.auth.decorators import login_required
-from core.models import Resume, CustomUser, News, Comment
-from django.views.decorators.csrf import csrf_exempt
 import io
-from reportlab.pdfgen import canvas
+import os.path
+
+from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, FileResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import simpleSplit, ImageReader
+from reportlab.lib.colors import HexColor
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+from xhtml2pdf import pisa
+
+from Resume import settings
+from Resume.settings import FONT_PATH
+from core.models import Resume, CustomUser, News, Comment
+from .forms import ResumeForm, NewsForm, CustomUserCreationForm
 
 
 # Create your views here.
@@ -54,7 +60,7 @@ def change_password(request, user_id):
         profile_user = CustomUser.objects.get(id=user_id)
     except CustomUser.DoesNotExist:
         return redirect('index')
-    
+
     if request.method == "POST":
         current_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
@@ -69,8 +75,9 @@ def change_password(request, user_id):
         profile_user.set_password(new_password)
         profile_user.save()
         update_session_auth_hash(request, profile_user)
-    
+
     return redirect('index')
+
 
 # створення резюме
 @login_required(login_url="login")
@@ -78,10 +85,12 @@ def create_resume(request):
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
 
         user = request.user
         user.first_name = first_name
         user.last_name = last_name
+        user.email = email
         try:
             user.save()
         except Exception as e:
@@ -96,7 +105,8 @@ def create_resume(request):
     else:
         form = ResumeForm(initial={
             "first_name": request.user.first_name,
-            "last_name": request.user.last_name
+            "last_name": request.user.last_name,
+            "email": request.user.email
         })
 
     return render(request, 'create_resume.html', {'form': form})
@@ -130,53 +140,80 @@ def download_resume(request, resume_id):
 
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+    margin = 50
+
     FONT_NAME = 'DejaVuSans'
     pdfmetrics.registerFont(TTFont(FONT_NAME, FONT_PATH))
-    width, height = A4
+    p.setFont(FONT_NAME, 12)
 
-    x, y = 50, height - 50
-    max_width = 480
-    line_height = 16
 
-    def write(text, size=12, bold=False, indent=0, space_before=10):
+    x_left = margin
+    x_right = width / 2 + 10
+    y = height - margin
+
+    if resume.user_picture:
+        image_path = os.path.join(settings.MEDIA_ROOT, str(resume.user_picture))
+        if os.path.exists(image_path):
+            try:
+                img = ImageReader(image_path)
+                img_width = 100
+                img_height = 100
+                p.drawImage(img, x_left, y - img_height, width=img_width, height=img_height, mask='auto')
+                y -= img_height + 10
+            except Exception as e:
+                print(f"Image error: {e}") 
+
+    p.setFont(FONT_NAME, 16)
+    p.setFillColor(HexColor("#000000"))
+    p.drawString(x_right, height - margin, f"{resume.user.first_name} {resume.user.last_name}")
+
+    p.setFont(FONT_NAME, 12)
+    if resume.title:
+        p.drawString(x_right, height - margin - 20, f"{resume.title}")
+
+    contact_y = y - 10
+    p.setFont(FONT_NAME, 10)
+    p.drawString(x_left, contact_y, f"Phone: {resume.phone}")
+    p.drawString(x_left, contact_y - 15, f"Email: {resume.user.email}")
+    p.drawString(x_left, contact_y - 30, f"Address: {resume.address}")
+    y = contact_y - 50
+
+    def section_of_write(title, content):
         nonlocal y
-        if not text:
+        if not content:
             return
-        y -= space_before
-        font = FONT_NAME + ('-Bold' if bold else "")
-        p.setFont(FONT_NAME, size)
-        lines = simpleSplit(str(text), FONT_NAME, size, max_width)
+        if y < 100:
+            p.showPage()
+            y = height - margin
+        p.setFont(FONT_NAME, 13)
+        p.setFillColor(HexColor("#005f73"))
+        p.drawString(x_left, y, title)
+        y -= 20
+        p.setFont(FONT_NAME, 11)
+        p.setFillColor(HexColor("#000000"))
+        lines = simpleSplit(str(content), FONT_NAME, 11, width - 2 * margin)
+
         for line in lines:
             if y < 50:
                 p.showPage()
-                y = height - 50
-                p.setFont(FONT_NAME, size)
-            p.drawString(x + indent, y, line)
-            y -= line_height
+                y = height - margin
+            p.drawString(x_left, y, line)
+            y -= 15
+        y -= 10
+    
+    section_of_write("About Me", resume.meta)
+    section_of_write("Skills", resume.skills)
+    section_of_write("Expirience", resume.job_exp)
+    section_of_write("Education", resume.education)
+    section_of_write("Additional Info", resume.add_information)
 
-    p.setFont(FONT_NAME, 16)
-    p.drawString(x, y, f"Resume: {resume.title}")
-    y -= 30
-
-    write(f"Name: {resume.user.first_name} {resume.user.last_name}", bold=True)
-    write(f"Phone: {resume.phone}")
-    write(f"Address: {resume.address}")
-    write(f"Languages: {resume.language}")
-
-    write("About Me: ", bold=True, space_before=20)
-    write(resume.meta)
-    write(f"Job experience: ")
-    write(resume.job_exp)
-    write(f"Education: {resume.education}")
-    write(f"Skills: {resume.skills}")
-    write(f"Addition information: {resume.add_information}")
 
     p.showPage()
     p.save()
     buffer.seek(0)
 
     return FileResponse(buffer, as_attachment=True, filename=f"{resume.title}.pdf")
-
 
 def make_copy(request, resume_id):
     original = get_object_or_404(Resume, id=resume_id)
@@ -221,16 +258,16 @@ def user_profile(request, user_id):
         profile_user = CustomUser.objects.get(id=user_id)
     except CustomUser.DoesNotExist:
         return redirect('index')
-    
+
     if request.user != profile_user:
         return redirect('index')
-    
+
     if request.method == "POST":
         profile_user.first_name = request.POST.get('first_name', '').strip()
         profile_user.last_name = request.POST.get('last_name', '').strip()
         profile_user.save()
         return redirect('user-profile', user_id=profile_user.id)
-    
+
     resumes = Resume.objects.filter(user=profile_user)
     return render(request, 'user_profile.html', {
         'profile_user': profile_user,
@@ -284,6 +321,7 @@ def delete_new(request, new_id):
     newD = get_object_or_404(News, id=new_id)
     newD.delete()
     return redirect('news-page')
+
 
 @csrf_exempt
 @login_required(login_url="login")

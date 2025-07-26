@@ -51,7 +51,7 @@
 <body>
     <div class="left">
         {% if resume.user_picture %}
-        <img src="{{ user_picture }}" alt="фото" class="photo">
+        <img src="{{ user_picture.url }}" alt="фото" class="photo">
         {% else %}
             {{ empty }}
         {% endif %}
@@ -66,8 +66,7 @@
         <div class="section">
             <p class="label">Skills</p>
             <ul>
-                {% for skill in resume.skills %}
-                <li>{{ skill }}</li>
+                <li>{{ resume.skills }}</li>
             </ul>
         </div>
 
