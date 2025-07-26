@@ -64,7 +64,7 @@ h3 {
     transition: 0.3s ease-in-out;
 }
 
-#custom-style-success-btn {
+#custom-style-success-btn, .custom-style-success-btn {
     text-decoration: none;
     border: 1px solid rgba(2, 207, 2, 1);
     background: transparent;
@@ -74,13 +74,13 @@ h3 {
 }
 
 
-#custom-style-success-btn:hover {
+#custom-style-success-btn:hover, .custom-style-success-btn:hover {
     background: linear-gradient(90deg, rgba(2, 207, 2, 1) 0%, rgba(83, 163, 83, 1) 50%, rgba(10, 148, 10, 1) 100%);
     color: #fff;
     transition: 0.3s ease-in-out;
 }
 
-#custom-style-warning-btn {
+#custom-style-warning-btn, .custom-style-warning-btn {
     text-decoration: none;
     border: 1px solid rgba(245, 34, 34, 1);
     background: #fff;
@@ -90,7 +90,7 @@ h3 {
 
 }
 
-#custom-style-warning-btn:hover {
+#custom-style-warning-btn:hover, .custom-style-warning-btn:hover {
     background: linear-gradient(90deg, rgba(245, 34, 34, 1) 0%, rgba(222, 104, 104, 1) 50%, rgba(176, 5, 5, 1) 100%);
     color: #fff;
     transition: 0.3s ease-in-out;
@@ -109,3 +109,17 @@ h3 {
     transition: 0.3s ease-in-out;
 }
 
+#custom-style-secondary-btn, .custom-style-secondary-btn {
+    text-decoration: none;
+    border: 1px solid rgba(138, 138, 138, 1);
+    background: transparent;
+    color: rgba(166, 166, 166, 1);
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+}
+
+#custom-style-secondary-btn:hover, .custom-style-secondary-btn:hover {
+    background: linear-gradient(90deg, rgba(166, 166, 166, 1) 0%, rgba(138, 138, 138, 1) 50%, rgba(74, 74, 74, 1) 100%);
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}

@@ -25,51 +25,55 @@
 
 <div class="title">{{ news.title }}</div>
 <hr>
-<p class="content">
-    <span>
-        {{ news.content }}
-    </span>
-    <span id="show-picture">
-        <div class="text-center">
-            {% if news.picture %}
-                <img src="{{ news.picture.url }}" class="rounded" alt="">
-            {% endif %}
-        </div>
-    </span>
-</p>
+<div class="vertical-scrolling" style="overflow-y: scroll; overflow-x: hidden; height: 300px;">
+    <p class="content">
+        <span>
+            {{ news.content }}
+        </span>
+        <span id="show-picture">
+            <div class="text-center">
+                {% if news.picture %}
+                    <img src="{{ news.picture.url }}" class="rounded" alt="">
+                {% endif %}
+            </div>
+        </span>
+    </p>
+</div>
 
 <hr class="under-line">
 
 <div class="comment">
-    <button id="openModal"  type="button" class="btn custom-style-primary-btn" data-bs-toggle="modal" data-bs-target="Model" data-bs-whatever="comment">Add comment</button>
-    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <!-- Modal for comment -->
+    <button type="button" class="btn custom-style-primary-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="comment">Add comment</button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
         <div class="modal-dialog">
-            
             <div class="modal-content">
-                
+
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="ModalLabel">New Comment</h1>
-                    <button id="closeModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="exampleModallabel">New Comment</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aira-label="Close"></button>
                 </div>
-            
+
                 <div class="modal-body">
-                    <form id="form">
+                    <form>
                         {% csrf_token %}
-                        <input type="hidden" id="new-id" value="{{ news.id }}"/>
+                        <input type="hidden" id="new-id" value="{{ news.id}}">
                         <div class="mb-3">
                             <label for="comment-text" class="col-form-label">Comment:</label>
-                            <textarea class="form-control" id="comment-text"></textarea>
+                            <textarea id="comment-text" class="form-control"></textarea>
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="modal-footer">
-                    <button type="button" id="closeModal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn custom-style-secondary-btn" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn custom-style-primary-btn" id="send-comment">Send comment</button>
                 </div>
-            
+
             </div>
         </div>
+
     </div>
 
     <div class="show-comments mt-4" id="comments">

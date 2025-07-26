@@ -29,7 +29,6 @@ class CustomUserChangeForm(UserChangeForm):
         model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'is_staff')
 
-
 class ResumeForm(forms.ModelForm):
     class Meta:
         model = Resume
@@ -62,10 +61,11 @@ class NewsForm(forms.ModelForm):
         }
 
 
-class PasswordChangingForm(PasswordChangeForm):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': "password"}))
-    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
-    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
+#Form for changing password
+class ChangingPasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter old password'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Enter new password"}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': "Enter new password again"}))
 
     class Meta:
         model = CustomUser
